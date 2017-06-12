@@ -1,0 +1,10 @@
+Package: com.noah.mcleaner
+Name: MCleaner
+Depends: 
+Architecture: iphoneos-arm
+Description: MCleaner is a Mobile Cleaner!
+Maintainer: Noah Little <njl02@outlook.com>
+Author: Noah Little <njl02@outlook.com>
+Section: Utilities
+Version: 0.0.1b2
+Installed-Size: 256
