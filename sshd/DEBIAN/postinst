@@ -1,5 +1,6 @@
 #!/bin/bash
 
+echo "Fixing Permissions..."
 cd "/Applications/sshd.app/"
 
 # process origin binary
