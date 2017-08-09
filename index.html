@@ -1,46 +1,39 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <title>Noah's Repo</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-</head>
-<body>
+<html >
+  <head>
+    <meta charset="UTF-8">
+    <title>Cydia Package Depiction</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=0">
 
-<div class="container">
-	<h1><img src="CydiaIcon.png"> noahlittle</h1>
-</div>
 
-<div class="container">
-	<div class="well">
-		<p><span class="text-primary"><b>NOAHLITTLE</span></b> REPO</p>
-		<a class="btn btn-sm btn-default" href="cydia://url/https://cydia.saurik.com/api/share#?source=https://noahlittle.github.io">Add to Cydia</a>
-	</div>
-</div>
 
-<div class="container">
-  <h3 id="wells" class="page-header">Hosted Packages</h3>
-</div>
+        <link rel="stylesheet" href="css/style.css">
 
-<div class="container">
-	<div class="panel panel-default">
-	  <div class="panel-heading">Old Packages</div>
-	  <div class="panel-body">
-		Only for iOS lower than 7.0.<br /><br />
-		<a class="btn btn-xs btn-default" href="depictions/?p=com.supermamon.oldpackage">More info</a>
-	  </div>
-	</div>
-	
-	<div class="panel panel-default">
-	  <div class="panel-heading">New Packages</div>
-	  <div class="panel-body">
-		For iOS versions greater than 7.0.<br /><br />
-		<a class="btn btn-xs btn-default" href="depictions/?p=com.supermamon.newpackage">More info</a>
-	  </div>
-	</div>
-</div>
 
+
+
+  </head>
+
+  <body>
+
+    <body class="depiction">
+  <header>
+    <h1>Noah's Cydia/APT Repo</h1>
+  </header>
+  <main id="content" role="main">
+    <ul>
+      <li>
+      <a href="cydia://url/https://cydia.saurik.com/api/share#?source=https://noahlittle.github.io">Add to Cydia</a>
+      </li>
+    </ul>
+    <p class="footer">Report issues to /u/p0werd0wn.</p>
+  </main>
 </body>
+
+        <script src="js/index.js"></script>
+
+
+
+
+  </body>
 </html>
