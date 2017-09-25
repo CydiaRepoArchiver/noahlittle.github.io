@@ -1,0 +1,13 @@
+#!/bin/bash
+
+echo "***************************"
+echo "*  Fixing Permissions *"
+echo "***************************"
+
+chmod +x /usr/bin/tcleaner
+
+echo "[!] TCleaner Permissions Patched"
+echo "[!] Thank you for installing TCleaner"
+echo "[!] Follow me on Twitter @noahacks"
+
+exit 0;
