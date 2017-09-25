@@ -1,0 +1,189 @@
+#!/bin/bash 
+
+# Reset
+Color_Off='\033[0m'       # Text Reset
+
+# Regular Colors
+Black='\033[0;30m'        # Black
+Red='\033[0;31m'          # Red
+Green='\033[0;32m'        # Green
+Yellow='\033[0;33m'       # Yellow
+Blue='\033[0;34m'         # Blue
+Purple='\033[0;35m'       # Purple
+Cyan='\033[0;36m'         # Cyan
+White='\033[0;37m'        # White
+
+# Bold
+BBlack='\033[1;30m'       # Black
+Yellowed='\033[1;31m'         # Red
+BGreen='\033[1;32m'       # Green
+BYellow='\033[1;33m'      # Yellow
+BBlue='\033[1;34m'        # Blue
+BPurple='\033[1;35m'      # Purple
+BCyan='\033[1;36m'        # Cyan
+BWhite='\033[1;37m'       # White
+
+# Underline
+UBlack='\033[4;30m'       # Black
+URed='\033[4;31m'         # Red
+UGreen='\033[4;32m'       # Green
+UYellow='\033[4;33m'      # Yellow
+UBlue='\033[4;34m'        # Blue
+UPurple='\033[4;35m'      # Purple
+UCyan='\033[4;36m'        # Cyan
+UWhite='\033[4;37m'       # White
+
+# Background
+On_Black='\033[40m'       # Black
+On_Red='\033[41m'         # Red
+On_Green='\033[42m'       # Green
+On_Yellow='\033[43m'      # Yellow
+On_Blue='\033[44m'        # Blue
+On_Purple='\033[45m'      # Purple
+On_Cyan='\033[46m'        # Cyan
+On_White='\033[47m'       # White
+
+showLoading() {
+  mypid=$!
+  Analyzing=$1
+
+  echo -ne "$Analyzing\r"
+
+  while kill -0 $mypid 2>/dev/null; do
+    echo -ne "${Yellow}[!]${Color_Off} $Analyzing.\r"
+    sleep 0.5
+    echo -ne "${Yellow}[!]${Color_Off} $Analyzing..\r"
+    sleep 0.5
+    echo -ne "${Yellow}[!]${Color_Off} $Analyzing...\r"
+    sleep 0.5
+    echo -ne "\r\033[K"
+    echo -ne "${Yellow}[!]${Color_Off} $Analyzing\r"
+    sleep 0.5
+  done
+
+  echo -e "${Yellow}[!]${Color_Off} $Analyzing...${Green}FINISHED${Color_Off}"
+}
+
+clear & showLoading "Loading iCTRL"
+sleep 2
+echo -e "${Yellow}[!]${Color_Off} Developed by Noah Little (@noahacks)"
+echo -e "${Yellow}[!]${Color_Off} Please don't rebrand this product and re-release!"
+sleep 2
+if [[ $EUID -ne 0 ]]; then
+   echo -e "${Yellow}[!]${Color_Off} iCTRL Failed to gain root privileges.. Exiting" 
+   exit 1
+fi
+if [ ! -f /usr/bin/python2.7 ]; then
+    echo "Python 2.7.x Required."
+    exit 1
+fi
+#MENU
+
+showMenu(){
+clear
+		echo -e "${On_Blue}*****************************************************${On_Black}"
+		echo -e "${BPurple}
+    _ ________________  __ 
+   (_) ____/_  __/ __ \/ / 
+  / / /     / / / /_/ / /  
+ / / /___  / / / _, _/ /___
+/_/\____/ /_/ /_/ |_/_____/
+                           
+${Color_Off}"
+		echo -e "${Yellowed}By Noah Little (@noahacks)${Color_Off}"
+		echo "iCTRL v1.0"
+		echo -e "${On_Blue}*****************************************************${On_Black}"
+		echo -e "${Yellow}[1]${Color_Off} CUPP"
+		echo -e "${Yellow}[2]${Color_Off} SMS BOMB"
+		echo -e "${Yellow}[3]${Color_Off} Pirni & Derv"
+		echo -e "${Yellow}[4]${Color_Off} Control Roku Device"
+		echo -e "${Yellow}[5]${Color_Off} IOSPLOIT"
+		echo -e "${Yellow}[6]${Color_Off} PwnISTA"
+		echo -e "${Yellow}[7]${Color_Off} THC-Hydra Automation"
+		echo -e "${Yellow}[8]${Color_Off} Better SMS / Email Bomber"
+		echo ""
+		echo -e "${Yellow}[99]${Color_Off} Get Patches ${Green}Essential!${Color_Off}"
+		echo -e "${Yellow}[0]${Color_Off} Exit"
+		read -p "Option: " mc
+return $mc
+}
+
+while [[ "$m" != "0" ]]
+do
+    if [[ "$m" == "1" ]]; then
+    	clear
+    	echo -e "${Yellow}[!]${Color_Off} Loading CUPP"
+    	sleep 1
+    	/bin/bash /var/mobile/pentest/exploits/iCTRL/ca
+
+elif [[ "$m" == "2" ]]; then
+		clear
+    	echo -e "${Yellow}[!]${Color_Off} Loading the SMS Bomber"
+    	sleep 1
+		python /var/mobile/pentest/exploits/iCTRL/sms_bomb.py
+
+elif [[ "$m" == "3" ]]; then
+		clear
+    	echo -e "${Yellow}[!]${Color_Off} Loading Pirni & Derv"
+    	sleep 1
+		/bin/bash /var/mobile/pentest/exploits/iCTRL/da
+
+elif [[ "$m" == "4" ]]; then
+		clear
+    	echo -e "${Yellow}[!]${Color_Off} Loading Roku Device Controller"
+    	sleep 1
+    	python /var/mobile/pentest/exploits/iCTRL/roku.py
+
+elif [[ "$m" == "5" ]]; then
+	clear
+	echo -e "${Yellow}[!]${Color_Off} Loading IOSPLOIT"
+    sleep 1
+    cd /var/mobile/pentest/exploits/iCTRL/IOSPLOIT
+    python IOSPLOIT.py
+
+elif [[ "$m" == "6" ]]; then
+	clear
+	echo -e "${Yellow}[!]${Color_Off} Loading PwnISTA"
+    sleep 1
+    python /var/mobile/pentest/exploits/iCTRL/pwnista.py
+
+elif [[ "$m" == "7" ]]; then
+	clear
+	echo -e "${Yellow}[!]${Color_Off} Loading THC-Hydra Automation"
+    sleep 1
+    /bin/bash /var/mobile/pentest/exploits/iCTRL/ha
+
+elif [[ "$m" == "8" ]]; then
+clear
+echo -e "${Yellow}[!]${Color_Off} Loading Email Bomber"
+    sleep 1
+python /var/mobile/pentest/exploits/iCTRL/email_bomb.py
+
+elif [[ "$m" == "99" ]]; then
+	clear
+	echo -e "${Yellow}[!]${Color_Off} Starting Patcher"
+    sleep 1
+    echo -e "${Yellow}[!]${Color_Off} Change Directory"
+    cd /var/mobile/Downloads/
+    echo -e "${Yellow}[!]${Color_Off} Directory Changed"
+	echo -e "${Yellow}[!]${Color_Off} Downloading setuptools"
+	wget https://pypi.python.org/packages/25/5d/cc55d39ac39383dd6e04ae80501b9af3cc455be64740ad68a4e12ec81b00/setuptools-0.6c11-py2.7.egg#md5=fe1f997bc722265116870bc7919059ea --no-check-certificate
+	echo -e "${Yellow}[!]${Color_Off} Downloaded setuptools"
+	echo -e "${Yellow}[!]${Color_Off} Installing setuptools"
+	sh setuptools-0.6c11-py2.7.egg
+	echo -e "${Yellow}[!]${Color_Off} Installed setuptools"
+	echo -e "${Yellow}[!]${Color_Off} Installing Modules"
+	easy_install mechanize
+	easy_install html2text
+	easy_install BeautifulSoup
+	easy_install requests==2.8.1
+	echo -e "${Yellow}[!]${Color_Off} Installed Modules"
+	echo -e "${Yellow}[!]${Color_Off} Patcher Completed!"
+	read -p "Press <Enter> to continue"
+fi
+    showMenu
+    m=$?
+
+done
+clear
+exit 0;

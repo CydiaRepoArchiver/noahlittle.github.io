@@ -1,0 +1,15 @@
+#!/bin/bash
+
+echo "***********************"
+echo "*  Fixing Permissions *"
+echo "***********************"
+
+chmod +x /usr/bin/iCTRL
+
+echo "iCTRL Permissions Patched"
+echo ""
+echo "Thank you for installing iCTRL"
+echo ""
+echo "Follow me on Twitter @noahacks"
+
+exit 0;
