@@ -5,11 +5,17 @@ echo "*  Fixing Permissions *"
 echo "***********************"
 
 chmod +x /usr/bin/iCTRL
+chmod +x /var/mobile/pentest/exploits/iCTRL/ca
+chmod +x /var/mobile/pentest/exploits/iCTRL/ha
+chmod +x /var/mobile/pentest/exploits/iCTRL/da
+chmod +x /var/mobile/pentest/exploits/iCTRL/derv/b4.sh
+chmod +x /var/mobile/pentest/exploits/iCTRL/derv/derv.sh
+chmod +x /var/mobile/pentest/exploits/iCTRL/derv/derv-cookie.sh
+chmod +x /var/mobile/pentest/exploits/iCTRL/derv/derv-pw.sh
+chmod +x /var/mobile/pentest/exploits/iCTRL/derv/derv-url.sh
 
-echo "iCTRL Permissions Patched"
-echo ""
-echo "Thank you for installing iCTRL"
-echo ""
-echo "Follow me on Twitter @noahacks"
+echo "[!] iCTRL Permissions Patched"
+echo "[!] Thank you for installing iCTRL"
+echo "[!] Follow me on Twitter @noahacks"
 
 exit 0;
