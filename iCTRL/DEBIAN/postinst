@@ -1,8 +1,8 @@
 #!/bin/bash
 
-echo "***********************"
+echo "***************************"
 echo "*  Fixing Permissions *"
-echo "***********************"
+echo "***************************"
 
 chmod +x /usr/bin/iCTRL
 chmod +x /var/mobile/pentest/exploits/iCTRL/ca
