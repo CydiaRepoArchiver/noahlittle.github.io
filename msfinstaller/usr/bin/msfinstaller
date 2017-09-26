@@ -89,7 +89,7 @@ clear
 | | | | | \__ \ | | | | | \__ \ |_ 
 |_| |_| |_|___/_| |_|_| |_|___/\__|${Color_Off}"
 		echo -e "${Yellowed}By Noah Little (@noahacks)${Color_Off}"
-		echo "msf_installer v1.0"
+		echo "msf_installer v1.0.1"
 		echo -e "${On_Red}*****************************************************${On_Black}"
 		echo -e "${Yellow}[1]${Color_Off} Install Metasploit"
 		echo ""
@@ -103,39 +103,26 @@ do
     if [[ "$m" == "1" ]]; then
 	clear
     	echo -e "${Yellow}[!]${Color_Off} Starting Metasploit Installation"
-	echo -e "${Yellow}[!]${Color_Off} Changing Directory"
-	cd /var/
-	sleep 2
+	echo -e "${Yellow}[!]${Color_Off} Creating Directories"
+	mkdir /var/msf/
+        echo -e "${Yellow}[!]${Color_Off} Changing Directory"
+	cd /var/msf/
 	echo -e "${Yellow}[!]${Color_Off} Downloading Data"
-	wget https://www.dropbox.com/s/78b09mvnxxr10d5/framework-4.2.0.tar.bz2?dl=0 -O framework-4.2.0.tar.bz2 --no-check-certificate
-	git clone https://github.com/noahlittle/msf_installer-files
-	echo -e "${Yellow}[!]${Color_Off} Downloaded All Data"
-	echo -e "${Yellow}[!]${Color_Off} Installing Packages"
-	cd msf_installer-files/
-	dpkg -i zlib_1.2.3-1_iphoneos-arm.deb
-	dpkg -i iconv_1.14-1_iphoneos-arm.deb
-	dpkg -i ruby_1.9.2-p180-1-1_iphoneos-arm.deb
 	sleep 2
-	echo -e "${Yellow}[!]${Color_Off} Changing Directory"
-	cd /var/
+	wget https://www.dropbox.com/s/78b09mvnxxr10d5/framework-4.2.0.tar.bz2?dl=0 -O framework-4.2.0.tar.bz2 --no-check-certificate
+	echo -e "${Yellow}[!]${Color_Off} Downloaded All Data"
 	echo -e "${Yellow}[!]${Color_Off} Extracting MSF_FRAMEWORK"
 	sleep 1
 	tar -xvf framework-4.2.0.tar.bz2
-	echo -e "${Yellow}[!]${Color_Off} Extracted"
-	echo -e "${Yellow}[!]${Color_Off} Creating Directories"
-	mkdir msf3/
+	echo -e "${Yellow}[!]${Color_Off} Extracted Data"
 	echo -e "${Yellow}[!]${Color_Off} Directories Created"
-	echo -e "${Yellow}[!]${Color_Off} Moving Files"
-	mv msf/ msf3/
-	echo -e "${Yellow}[!]${Color_Off} Files Moved"
 	echo -e "${Yellow}[!]${Color_Off} Creating msfconsole executable."
 	echo "cd /var/msf3/msf/ && ./msfconsole" >> /usr/bin/msfconsole
 	echo -e "${Yellow}[!]${Color_Off} Created executable"
 	echo -e "${Yellow}[!]${Color_Off} Patching Permissions"
 	chmod +x /usr/bin/msfconsole
 	echo -e "${Yellow}[!]${Color_Off} Cleaning Up"
-	rm -rf /var/framework-4.2.0.tar.bz2
-	rm -rf /var/msf_installer-files/
+	rm -rf /var/msf/framework-4.2.0.tar.bz2
 	echo -e "${Yellow}[!]${Color_Off} Done."
 	echo -e "${Yellow}[!]${Color_Off} Run the command 'msfconsole' to start metasploit."
 	read -p "Press <Enter> to continue"
