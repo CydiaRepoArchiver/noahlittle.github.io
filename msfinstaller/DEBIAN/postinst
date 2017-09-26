@@ -6,7 +6,7 @@ echo "***************************"
 
 chmod +x /usr/bin/msfinstaller
 echo "[!] msfinstaller Permissions Patched"
-echo "[!] Thank you for installing iCTRL"
+echo "[!] Thank you for installing Metasploit Installer"
 echo "[!] Follow me on Twitter @noahacks"
 echo "[!] Type in Terminal: msfinstaller"
 exit 0;

@@ -105,6 +105,7 @@ do
     	echo -e "${Yellow}[!]${Color_Off} Starting Metasploit Installation"
 	echo -e "${Yellow}[!]${Color_Off} Changing Directory"
 	cd /var/
+	sleep 2
 	echo -e "${Yellow}[!]${Color_Off} Downloading Data"
 	wget https://www.dropbox.com/s/78b09mvnxxr10d5/framework-4.2.0.tar.bz2?dl=0 -O framework-4.2.0.tar.bz2 --no-check-certificate
 	git clone https://github.com/noahlittle/msf_installer-files
