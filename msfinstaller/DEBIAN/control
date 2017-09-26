@@ -1,7 +1,7 @@
 Package: com.noahlit.msfinstaller
 Name: Metasploit Installer
 Depends: bigbosshackertools, zlib, iconv, ruby
-Version: 1.0.1
+Version: 1.0.2
 Architecture: iphoneos-arm
 Description: Metasploit Installer is a CLI Tool that aims at easily installing and configuring Metasploit Framework on any iOS Device. You must type this command in Terminal to use it. msfinstaller
 Maintainer: noahacks <njl02@outlook.com>
