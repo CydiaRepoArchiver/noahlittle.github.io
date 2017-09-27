@@ -81,6 +81,7 @@ fi
 showMenu(){
 clear
 		echo -e "${On_Red}*****************************************************${On_Black}"
+		echo ""
 		echo -e "${Green}
                 __ _           _   
                / _(_)         | |  
@@ -89,7 +90,8 @@ clear
 | | | | | \__ \ | | | | | \__ \ |_ 
 |_| |_| |_|___/_| |_|_| |_|___/\__|${Color_Off}"
 		echo -e "${Yellowed}By Noah Little (@noahacks)${Color_Off}"
-		echo "msf_installer v1.0.3"
+		echo "msf_installer v1.0.4"
+		echo ""
 		echo -e "${On_Red}*****************************************************${On_Black}"
 		echo -e "${Yellow}[1]${Color_Off} Install Metasploit"
 		echo ""
@@ -105,32 +107,25 @@ do
     	echo -e "${Yellow}[!]${Color_Off} Starting Metasploit Installation"
 	echo -e "${Yellow}[!]${Color_Off} Creating Directories"
 	mkdir /var/msf3/
-	mkdir /var/msf3/msf/
         echo -e "${Yellow}[!]${Color_Off} Changing Directory"
 	cd /var/msf3/
 	echo -e "${Yellow}[!]${Color_Off} Downloading Data"
 	sleep 2
-	wget https://www.dropbox.com/s/gs1vk37vqvq89p3/1.tar.bz2?dl=0 -O 1.tar.bz2--no-check-certificate
-	wget https://www.dropbox.com/s/j6rog7ryl7pk1ao/2.tar.bz2?dl=0 -O 2.tar.bz2 --no-check-certificate
+	wget https://www.dropbox.com/s/78b09mvnxxr10d5/framework-4.2.0.tar.bz2?dl=0 -O framework.tar.bz2 --no-check-certificate
 	echo -e "${Yellow}[!]${Color_Off} Downloaded All Data"
 	echo -e "${Yellow}[!]${Color_Off} Extracting MSF_FRAMEWORK"
 	sleep 1
-	tar -xvjf 1.tar.bz2
-	tar -xvjf 2.tar.bz2
+	tar -xvjf framework.tar.bz2
 	echo -e "${Yellow}[!]${Color_Off} Extracted Data"
-	echo -e "${Yellow}[!]${Color_Off} Moving Files"
-	mv /var/msf3/1/* /var/msf3/msf/
-	mv /var/msf3/2/* /var/msf3/msf/
 	echo -e "${Yellow}[!]${Color_Off} Creating msfconsole executable."
+	rm /usr/bin/msfconsole
+	sleep 2
 	echo "cd /var/msf3/msf/ && ./msfconsole" >> /usr/bin/msfconsole
 	echo -e "${Yellow}[!]${Color_Off} Created executable"
 	echo -e "${Yellow}[!]${Color_Off} Patching Permissions"
 	chmod +x /usr/bin/msfconsole
 	echo -e "${Yellow}[!]${Color_Off} Cleaning Up"
-	rm -rf /var/msf3/1.tar.bz2
-	rm -rf /var/msf3/2.tar.bz2
-	rm -rf /var/msf3/1/
-	rm -rf /var/msf3/2/
+	rm -rf /var/msf3/framework.tar.bz2
 	clear
 	echo -e "${Yellow}[!]${Color_Off} Done."
 	echo -e "${Yellow}[!]${Color_Off} Run the command 'msfconsole' to start metasploit."
