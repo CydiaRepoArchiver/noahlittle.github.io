@@ -68,7 +68,7 @@ echo -e "${BR}[!]${NC} Developed by Noah Little (@noahacks)"
 echo -e "${BR}[!]${NC} Please don't rebrand this product and re-release!"
 sleep 2
 if [[ $EUID -ne 0 ]]; then
-   echo -e "${BR}[!]${NC} TCLEANER requires root privileges, exiting..." 
+   echo -e "${BR}[!]${NC} $(echo ${0} | cut -d '/' -f 2 | cut -d ' ' -f 2) requires root privileges, please use ${RED}sudo ${0}" 
    exit 1
 fi
 sleep 2
