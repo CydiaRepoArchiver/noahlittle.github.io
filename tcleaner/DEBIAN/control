@@ -1,7 +1,7 @@
 Package: com.noahlit.tcleaner
 Name: TCleaner
-Depends: 
-Version: 1.0
+Depends: bc
+Version: 1.0.1
 Architecture: iphoneos-arm
 Description: TCleaner is a iOS cleaning tool, it is a CLI tool. It could be dangerous if you don't know what you're doing. I AM NOT RESPONSIBLE FOR ANY HARM CAUSED TO YOU'RE HEALTH OR DEVICE. Created by @noahacks on Twitter.
 Maintainer: noahacks <njl02@outlook.com>
