@@ -192,3 +192,4 @@ read -p "Press <Enter> to continue"
 done
 clear
 exit 0;
+text2
