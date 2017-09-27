@@ -130,7 +130,7 @@ do
 		rm -rf /var/mobile/Library/SMS/Attachments/*
 		echo -e "${BR}[!]${NC} Cleaning Assets"
 		rm -rf /var/mobile/Library/Assets/
- 			clear
+ 		clear
 
 		echo -e "${BR}[!]${NC} Cleaned ${LGR}${SIZEDIV}${NC} Megabytes."
 		echo ""
@@ -165,7 +165,7 @@ elif [[ "$m" == "2" ]]; then
 		echo -e "${BR}[!]${NC} Cleaning IPA Files"
 		rm -rf /var/mobile/Library/Application\ Support/Containers/com.iphonecake.appcake2/Documents/Inbox/*.ipa
 		clear
-
+	
 		echo -e "${BR}[!]${NC} Cleaned ${LGR}${SIZEDIV2}${NC} Megabytes."
 read -p "Press <Enter> to continue"
 	
@@ -192,4 +192,3 @@ read -p "Press <Enter> to continue"
 done
 clear
 exit 0;
-text2
