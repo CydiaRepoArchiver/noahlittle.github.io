@@ -99,7 +99,7 @@ clear
                            
 ${Color_Off}"
 		echo -e "${Yellowed}By Noah Little (@noahacks)${Color_Off}"
-		echo "iCTRL v1.0.2"
+		echo "iCTRL v1.1"
 		echo -e "${On_Blue}*****************************************************${On_Black}"
 		echo -e "${Yellow}[1]${Color_Off} CUPP"
 		echo -e "${Yellow}[2]${Color_Off} SMS BOMB"
