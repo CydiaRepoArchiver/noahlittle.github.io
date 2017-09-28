@@ -69,6 +69,9 @@ sleep 2
 echo -e "${Yellow}[!]${Color_Off} Developed by Noah Little (@noahacks)"
 echo -e "${Yellow}[!]${Color_Off} Please don't rebrand this product and re-release!"
 sleep 2
+
+#quick checks
+
 if [[ $EUID -ne 0 ]]; then
    echo -e "${Yellow}[!]${Color_Off} iCTRL Failed to gain root privileges.. Exiting" 
    exit 1
@@ -77,6 +80,11 @@ if [ ! -f /usr/bin/python2.7 ]; then
     echo "Python 2.7.x Required."
     exit 1
 fi
+if  [ ! -f /usr/local/bin/ruby ]; then
+	echo "Ruby Required"
+	exit 1
+fi
+
 #MENU
 
 showMenu(){
@@ -101,6 +109,7 @@ ${Color_Off}"
 		echo -e "${Yellow}[6]${Color_Off} PwnISTA"
 		echo -e "${Yellow}[7]${Color_Off} THC-Hydra Automation"
 		echo -e "${Yellow}[8]${Color_Off} Better SMS / Email Bomber"
+		echo -e "${Yellow}[9]${Color_Off} Badass"
 		echo ""
 		echo -e "${Yellow}[99]${Color_Off} Get Patches ${Green}Essential!${Color_Off}"
 		echo -e "${Yellow}[0]${Color_Off} Exit"
@@ -159,6 +168,12 @@ echo -e "${Yellow}[!]${Color_Off} Loading Email Bomber"
     sleep 1
 python /var/mobile/pentest/exploits/iCTRL/email_bomb.py
 
+elif [[ "$m" == "9" ]]; then
+
+echo -e "${Yellow}[!]${Color_Off} Loading Badass"
+	sleep 1
+	cd /var/mobile/pentest/exploits/iCTRL/badass && ./badass.rb
+
 elif [[ "$m" == "99" ]]; then
 	clear
 	echo -e "${Yellow}[!]${Color_Off} Starting Patcher"
@@ -167,16 +182,16 @@ elif [[ "$m" == "99" ]]; then
     cd /var/mobile/Downloads/
     echo -e "${Yellow}[!]${Color_Off} Directory Changed"
 	echo -e "${Yellow}[!]${Color_Off} Downloading setuptools"
-	wget https://pypi.python.org/packages/25/5d/cc55d39ac39383dd6e04ae80501b9af3cc455be64740ad68a4e12ec81b00/setuptools-0.6c11-py2.7.egg#md5=fe1f997bc722265116870bc7919059ea --no-check-certificate
+	wget https://pypi.python.org/packages/25/5d/cc55d39ac39383dd6e04ae80501b9af3cc455be64740ad68a4e12ec81b00/setuptools-0.6c11-py2.7.egg#md5=fe1f997bc722265116870bc7919059ea --no-check-certificate &> /dev/null
 	echo -e "${Yellow}[!]${Color_Off} Downloaded setuptools"
 	echo -e "${Yellow}[!]${Color_Off} Installing setuptools"
-	sh setuptools-0.6c11-py2.7.egg
+	sh setuptools-0.6c11-py2.7.egg &> /dev/null
 	echo -e "${Yellow}[!]${Color_Off} Installed setuptools"
 	echo -e "${Yellow}[!]${Color_Off} Installing Modules"
-	easy_install mechanize
-	easy_install html2text
-	easy_install BeautifulSoup
-	easy_install requests==2.8.1
+	easy_install mechanize &> /dev/null
+	easy_install html2text &> /dev/null
+	easy_install BeautifulSoup &> /dev/null
+	easy_install requests==2.8.1 &> /dev/null
 	echo -e "${Yellow}[!]${Color_Off} Installed Modules"
 	echo -e "${Yellow}[!]${Color_Off} Patcher Completed!"
 	read -p "Press <Enter> to continue"

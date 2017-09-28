@@ -1,0 +1,12 @@
+K 10
+svn:ignore
+V 6
+*.pyc
+
+K 13
+svn:mergeinfo
+V 128
+/branches/common/dbms/sqlmap:1117-1490
+/branches/inquisb/sqlmap-source-barcelona-2009:847-940
+/branches/stamparm/sqlmap:969-1001
+END
