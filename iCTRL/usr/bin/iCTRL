@@ -80,11 +80,6 @@ if [ ! -f /usr/bin/python2.7 ]; then
     echo "Python 2.7.x Required."
     exit 1
 fi
-if  [ ! -f /usr/local/bin/ruby ]; then
-	echo "Ruby Required"
-	exit 1
-fi
-
 #MENU
 
 showMenu(){
@@ -99,7 +94,7 @@ clear
                            
 ${Color_Off}"
 		echo -e "${Yellowed}By Noah Little (@noahacks)${Color_Off}"
-		echo "iCTRL v1.1"
+		echo "iCTRL v1.1.1"
 		echo -e "${On_Blue}*****************************************************${On_Black}"
 		echo -e "${Yellow}[1]${Color_Off} CUPP"
 		echo -e "${Yellow}[2]${Color_Off} SMS BOMB"
@@ -109,7 +104,6 @@ ${Color_Off}"
 		echo -e "${Yellow}[6]${Color_Off} PwnISTA"
 		echo -e "${Yellow}[7]${Color_Off} THC-Hydra Automation"
 		echo -e "${Yellow}[8]${Color_Off} Better SMS / Email Bomber"
-		echo -e "${Yellow}[9]${Color_Off} Badass"
 		echo ""
 		echo -e "${Yellow}[99]${Color_Off} Get Patches ${Green}Essential!${Color_Off}"
 		echo -e "${Yellow}[0]${Color_Off} Exit"
@@ -167,12 +161,6 @@ clear
 echo -e "${Yellow}[!]${Color_Off} Loading Email Bomber"
     sleep 1
 python /var/mobile/pentest/exploits/iCTRL/email_bomb.py
-
-elif [[ "$m" == "9" ]]; then
-
-echo -e "${Yellow}[!]${Color_Off} Loading Badass"
-	sleep 1
-	cd /var/mobile/pentest/exploits/iCTRL/badass && ./badass.rb
 
 elif [[ "$m" == "99" ]]; then
 	clear
