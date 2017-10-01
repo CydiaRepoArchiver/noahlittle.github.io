@@ -41,7 +41,7 @@ fileSizes() {
 	CYDIASIZE2="$(echo `find /var/cache/apt/archives/ -type f -exec stat -c %s {} \; | tr '\n' '+' | sed 's/+$//g'` | bc)"
 	IPASIZE="$(echo `find /var/mobile/Library/Application\ Support/Containers/com.iphonecake.appcake2/Documents/Inbox/ -type f -exec stat -c %s {} \; | tr '\n' '+' | sed 's/+$//g'` | bc)"
 	SMSSIZE="$(echo `find /var/mobile/Library/SMS/Attachments/ -type f -exec stat -c %s {} \; | tr '\n' '+' | sed 's/+$//g'` | bc)"
-	ASSETSSIZE="$(echo `find /var/mobile/Library/Assets -type f -exec stat -c %s {} \; | tr '\n' '+' | sed 's/+$//g'` | bc)"
+	ASSETSSIZE="$(echo `find /var/mobile/Library/Assets -type f -exec stat -c %s {} \; | tr '\n' '+' | sed 's/+$//g'` | bc &> /dev/null)"
 	SIZE=$((APPLOGSIZE + TMPSIZE + CYDIASIZE + CACHESIZE + CYDIASIZE2 + IPASIZE + SMSSIZE + ASSETSSIZE + LOGSSIZE + LOGSSIZE2 + LOGSSIZE3 + DOWNLOADSIZE))
 
 	SIZEDIV=$((SIZE / 1024 /1024))
@@ -82,7 +82,7 @@ clear
 		echo "-----------------------------------------------------"
 		echo -e "${BR}                      TCLEANER${NC}"
 		echo -e "${BR}                noahlittle.github.io${NC}"
-		echo -e "${LGR}v1.0.3${NC}"
+		echo -e "${LGR}v1.0.4${NC}"
 		echo "-----------------------------------------------------"
 		echo -e "${BR}[1]${NC} Clean All ${RED}(DANGEROUS)${NC}"
 		echo -e "${BR}[2]${NC} Clean ${GR}(SAFE)${NC}"
@@ -108,7 +108,7 @@ do
 		clear & showLoading "Analyzing"
 		fileSizes
 		echo -e "${BR}[!]${NC} Cleaning TMP"
-		rm -rf /var/tmp/*	
+		rm -rf /var/tmp/*
 		echo -e "${BR}[!]${NC} Cleaning Downloads"
 		rm -rf /var/mobile/Media/Downloads/*
 		echo -e "${BR}[!]${NC} Cleaning Log Files"
@@ -129,7 +129,7 @@ do
 		echo -e "${BR}[!]${NC} Cleaning Messages"
 		rm -rf /var/mobile/Library/SMS/Attachments/*
 		echo -e "${BR}[!]${NC} Cleaning Assets"
-		rm -rf /var/mobile/Library/Assets/
+		rm -rf /var/mobile/Library/Assets/ &> /dev/null
  		clear
 
 		echo -e "${BR}[!]${NC} Cleaned ${LGR}${SIZEDIV}${NC} Megabytes."
@@ -178,7 +178,7 @@ read -p "Press <Enter> to continue"
 		echo -e "${BR}[!]${NC} Removing Assets"
 		clear & showLoading "Analyzing"
 		fileSizes
-		rm -rf /var/mobile/Library/Assets/
+		rm -rf /var/mobile/Library/Assets/ &> /dev/null
 		echo -e "${BR}[!]${NC} Cleaned ${LGR}${SIZEDIV3}${NC} Megabytes."
 		echo ""
 		read -p "Press <Enter> to continue"

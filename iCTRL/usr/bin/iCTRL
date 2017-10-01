@@ -94,7 +94,7 @@ clear
                            
 ${Color_Off}"
 		echo -e "${Yellowed}By Noah Little (@noahacks)${Color_Off}"
-		echo "iCTRL v1.1.1"
+		echo "iCTRL v1.1.2"
 		echo -e "${On_Blue}*****************************************************${On_Black}"
 		echo -e "${Yellow}[1]${Color_Off} CUPP"
 		echo -e "${Yellow}[2]${Color_Off} SMS BOMB"
@@ -165,10 +165,17 @@ python /var/mobile/pentest/exploits/iCTRL/email_bomb.py
 elif [[ "$m" == "99" ]]; then
 	clear
 	echo -e "${Yellow}[!]${Color_Off} Starting Patcher"
-    sleep 1
-    echo -e "${Yellow}[!]${Color_Off} Change Directory"
-    cd /var/mobile/Downloads/
-    echo -e "${Yellow}[!]${Color_Off} Directory Changed"
+	sleep 1
+        echo -e "${Yellow}[!]${Color_Off} Running Some Checks"
+        if [ ! -f /var/mobile/Downloads/ ]; then
+	mkdir /var/mobile/Downloads/
+        echo -e "${Yellow}[!]${Color_Off} Created Downloads Directory"
+	fi
+        echo -e "${Yellow}[!]${Color_Off} All Checks PASSED, Continuing."
+	sleep 2
+	echo -e "${Yellow}[!]${Color_Off} Change Directory"
+	cd /var/mobile/Downloads/
+	echo -e "${Yellow}[!]${Color_Off} Directory Changed"
 	echo -e "${Yellow}[!]${Color_Off} Downloading setuptools"
 	wget https://pypi.python.org/packages/25/5d/cc55d39ac39383dd6e04ae80501b9af3cc455be64740ad68a4e12ec81b00/setuptools-0.6c11-py2.7.egg#md5=fe1f997bc722265116870bc7919059ea --no-check-certificate &> /dev/null
 	echo -e "${Yellow}[!]${Color_Off} Downloaded setuptools"

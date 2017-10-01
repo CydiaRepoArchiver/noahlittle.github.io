@@ -104,7 +104,7 @@ while [[ "$m" != "0" ]]
 do
     if [[ "$m" == "1" ]]; then
 	clear
-    	echo -e "${Yellow}[!]${Color_Off} Starting Metasploit Installation"
+	echo -e "${Yellow}[!]${Color_Off} Starting Metasploit Installation"
 	echo -e "${Yellow}[!]${Color_Off} Creating Directories"
 	mkdir /var/msf3/
         echo -e "${Yellow}[!]${Color_Off} Changing Directory"
