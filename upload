@@ -1,7 +1,6 @@
 #ZHU SHOU"
 
-echo "Commit Message?"
-read message
+read -p 'Commit Message: ' message
 
 #er
 
