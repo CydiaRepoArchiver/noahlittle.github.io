@@ -1,5 +1,6 @@
 #ZHU SHOU"
 
+clear
 read -p 'Commit Message: ' message
 
 #er
