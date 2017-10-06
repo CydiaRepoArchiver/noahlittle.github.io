@@ -27,42 +27,142 @@ showLoading() {
   echo -e "${BR}[!]${NC} $Analyzing...${GR}FINISHED${NC}"
 }
 
+function ask_yes_or_no() {
+    read -p "$1 ([y]es or [N]o): "
+    case $(echo $REPLY | tr '[A-Z]' '[a-z]') in
+        y|yes) echo "yes" ;;
+        *)     echo "no" ;;
+    esac
+}
+
 fileSizes() {
 
 	#TYPED 1
 	if [ -d "/var/mobile/Media/Downloads/" ]; then
+	DOWNLOADSTATUS=1
 	DOWNLOADSIZE="$(echo `find /var/mobile/Media/Downloads/ -type f -exec stat -c %s {} \; | tr '\n' '+' | sed 's/+$//g'` | bc)"
+	else
+	DOWNLOADSTAUS=2
 	fi	
+	#NO CHECKS NEEDED FOR LOGS
+
 	LOGSSIZE="$(echo `find /var/logs/ -type f -exec stat -c %s {} \; | tr '\n' '+' | sed 's/+$//g'` | bc)"
 	LOGSSIZE2="$(echo `find /var/log/ -type f -exec stat -c %s {} \; | tr '\n' '+' | sed 's/+$//g'` | bc)"
 	LOGSSIZE3="$(echo `find /var/mobile/Library/Logs/ -type f -exec stat -c %s {} \; | tr '\n' '+' | sed 's/+$//g'` | bc)"
+
+	#CONTINUE CHECKS	
+
 	if [ -d "/private/var/mobile/Containers/Data/Application/" ]; then
+	APPLOGSTATUS=1
 	APPLOGSIZE="$(echo `find /private/var/mobile/Containers/Data/Application/ -name "*.log" -type f -exec stat -c %s {} \; | tr '\n' '+' | sed 's/+$//g'` | bc)"
+	else
+	APPLOGSTATUS=2
 	fi
+
+	#NO CHECKS NEEDED FOR TMP
+
 	TMPSIZE="$(echo `find /var/tmp/ -type f -exec stat -c %s {} \; | tr '\n' '+' | sed 's/+$//g'` | bc)"
-        if [ -d "/var/mobile/Library/Caches/" ]; then
+        
+	#CONTINUE CHECKS
+	
+	if [ -d "/var/mobile/Library/Caches/" ]; then
+	CACHESTATUS=1
 	CACHESIZE="$(echo `find /var/mobile/Library/Caches/ ! -name *. -not -path "/var/mobile/Library/Caches/CloudKit/*" -type f -exec stat -c %s {} \; | tr '\n' '+' | sed 's/+$//g'` | bc)"
+	else
+	CACHESTATUS=2
 	fi
 	if [ -d "/var/mobile/Documents/CyDown/" ]; then
+	CYDIASTATUS=1
 	CYDIASIZE="$(echo `find /var/mobile/Documents/CyDown/ -type f -exec stat -c %s {} \; | tr '\n' '+' | sed 's/+$//g'` | bc)"
+	else
+	CYDIASTATUS=2
 	fi
+
+	#NO CHECKS NEEDED FOR CYDIASIZE2
+
 	CYDIASIZE2="$(echo `find /var/cache/apt/archives/ -type f -exec stat -c %s {} \; | tr '\n' '+' | sed 's/+$//g'` | bc)"
+
+	#CONTINUE CHECKS
+
 	if [ -d "/var/mobile/Library/Application\ Support/Containers/com.iphonecake.appcake2/Documents/Inbox/" ]; then
+	IPASTATUS=1
 	IPASIZE="$(echo `find /var/mobile/Library/Application\ Support/Containers/com.iphonecake.appcake2/Documents/Inbox/ -type f -exec stat -c %s {} \; | tr '\n' '+' | sed 's/+$//g'` | bc)"
+	else
+	IPASTATUS=2
 	fi
 	if [ -d "/var/mobile/Library/SMS/Attachments/" ]; then
+	SMSSTATUS=1
 	SMSSIZE="$(echo `find /var/mobile/Library/SMS/Attachments/ -type f -exec stat -c %s {} \; | tr '\n' '+' | sed 's/+$//g'` | bc)"
+	else
+	SMSSTATUS=2
 	fi
 	if [ -d "/var/mobile/Library/Assets" ]; then
+	ASSETSSTATUS=1
 	ASSETSSIZE="$(echo `find /var/mobile/Library/Assets -type f -exec stat -c %s {} \; | tr '\n' '+' | sed 's/+$//g'` | bc)"
+	else
+	ASSETSSTATUS=2
 	fi
-	SIZE=$((APPLOGSIZE + TMPSIZE + CYDIASIZE + CACHESIZE + CYDIASIZE2 + IPASIZE + SMSSIZE + ASSETSSIZE + LOGSSIZE + LOGSSIZE2 + LOGSSIZE3 + DOWNLOADSIZE))
+	
 
+	#MATHS EXAM FOR SIZE 1
+
+	
+	if [ $DOWNLOADSTATUS -eq 1 ]
+	then
+	ASSETSSIZE=0
+	fi
+	
+	if [ $APPLOGSTATUS -eq 1 ]
+	then
+	APPLOGSIZE=0
+	fi
+
+	if [ $CACHESTATUS -eq 1 ]
+	then
+	CACHESIZE=0
+	fi
+
+        if [ $CYDIASTATUS -eq 1 ]
+        then
+        CYDIASIZE=0
+        fi
+
+        if [ $IPASTATUS -eq 1 ]
+        then
+        IPASIZE=0
+        fi
+
+        if [ $SMSSTATUS -eq 1 ]
+        then
+        SMSSIZE=0
+        fi
+
+        if [ $ASSETSSTATUS -eq 1 ]
+        then
+        ASSETSSIZE=0
+        fi
+
+	#FINISHED MATHS EXAM
+	
+	SIZE=$((APPLOGSIZE + TMPSIZE + CYDIASIZE + CACHESIZE + CYDIASIZE2 + IPASIZE + SMSSIZE + ASSETSSIZE + LOGSSIZE + LOGSSIZE2 + LOGSSIZE3 + DOWNLOADSIZE))
 	SIZEDIV=$((SIZE / 1024 /1024))
 
 	#TYPED 2
 	TMPSIZE2="$(echo `find /var/tmp -type f -exec stat -c %s {} \; | tr '\n' '+' | sed 's/+$//g'` | bc)"
+	if [ -d "/var/mobile/Library/Caches/" ]; then
+	CACHESTATUS2=1
 	CACHESIZE2="$(echo `find /var/mobile/Library/Caches/ -type f -exec stat -c %s {} \; | tr '\n' '+' | sed 's/+$//g'` | bc)"
+	else
+	CACHESTATUS2=2
+	fi
+
+	
+	if [ $CACHESTATUS2 -eq 1 ]
+        then
+        CACHESIZE2=0
+	fi
+
+
 	SIZE2=$((APPLOGSIZE + TMPSIZE2 + CACHESIZE2 + SMSSIZE + CYDIASIZE + CYDIASIZE2 + IPASIZE + LOGSSIZE + LOGSSIZE2 + LOGSSIZE3 + DOWNLOADSIZE))
 	SIZEDIV2=$((SIZE2 / 1024 / 1024))
 
@@ -70,14 +170,11 @@ fileSizes() {
 	SIZE3=$((ASSETSSIZE))
 	SIZEDIV3=$((SIZE3 / 1024 / 1024))
 
-	#OTHER
-	ZERO="$(echo 0)"
-
 
 }
 
 clear & showLoading "Loading TCLEANER"
-sleep 2
+sleep 1
 echo -e "${BR}[!]${NC} Developed by Noah Little (@noahacks)"
 echo -e "${BR}[!]${NC} Please don't rebrand this product and re-release!"
 sleep 2
@@ -96,7 +193,7 @@ clear
 		echo "-----------------------------------------------------"
 		echo -e "${BR}                    .:TCLEANER:.${NC}"
 		echo -e "${BR}                noahlittle.github.io${NC}"
-		echo -e "${LGR}v1.0.6${NC}"
+		echo -e "${LGR}v1.1${NC}"
 		echo "-----------------------------------------------------"
 		echo -e "${BR}[1]${NC} Clean All ${RED}(DANGEROUS)${NC}"
 		echo -e "${BR}[2]${NC} Clean ${GR}(SAFE)${NC}"
@@ -104,8 +201,8 @@ clear
 		echo ""
 		echo -e "${BR}[0]${NC} Exit"
 		echo "-----------------------------------------------------"
-		echo -e "${BR}[!]${NC}$(df -B1 | grep 'disk0s1s1' | cut -c49-52) Used on / Partition."
-		echo -e "${BR}[!]${NC}$(df -B1 | grep 'disk0s1s2' | cut -c49-52) Used on /private/var/ Partition."
+		echo -e "${BR}[!]${NC} $(df /dev/disk0s1s1 | awk '{print $5}' | tail -n 1) Used on / Partition."
+		echo -e "${BR}[!]${NC} $(df /dev/disk0s1s2 | awk '{print $5}' | tail -n 1) Used on /private/var/ Partition."
 		echo "-----------------------------------------------------"
 		echo ""
 		read -p "Option: " mc
@@ -119,65 +216,90 @@ while [[ "$m" != "0" ]]
 do
     if [[ "$m" == "1" ]]; then
         
-		clear & showLoading "Analyzing"
-		fileSizes
+		clear
+		fileSizes & showLoading "Analyzing"
 		echo -e "${BR}[!]${NC} Cleaning TMP"
 		rm -rf /var/tmp/* &> /dev/null
+		if [[ $DOWNLOADSTATUS == 1 ]]; then
 		echo -e "${BR}[!]${NC} Cleaning Downloads"
 		rm -rf /var/mobile/Media/Downloads/* &> /dev/null
+		fi
 		echo -e "${BR}[!]${NC} Cleaning Log Files"
 		find /var/logs/ -name "*.log*" -exec rm {} \; &> /dev/null
 		find /var/log/ -name "*.log*" -exec rm {} \; &> /dev/null
-		rm -rf /var/mobile/diskpie.last &> /dev/null
 		rm -rf /var/mobile/.bash_history &> /dev/null
 		find /var/mobile/Library/Logs/ -name "*.log*" -exec rm {} \;  &> /dev/null
+		if [[ $APPLOGSTATUS == 1 ]]; then
+		echo -e "${BR}[!]${NC} Cleaning Application Logs"
 		find /var/mobile/Containers/Data/Application/ -name "*.log" -exec rm {} \;  &> /dev/null
+		fi
+		if [[ $CACHESTATUS == 1 ]]; then
 		echo -e "${BR}[!]${NC} Cleaning Caches"
 		rm -rf /var/mobile/Library/Caches/* &> /dev/null
+		fi
 		echo -e "${BR}[!]${NC} Cleaning Cydia"
+		if [[ $CYDIASTATUS == 1 ]]; then
 		rm -rf /var/mobile/Documents/CyDown/* &> /dev/null
+		fi
 		rm -rf /var/cache/apt/archives/partial/*.deb
 		rm -rf /var/cache/apt/archives/*.deb &> /dev/null
+		if [[ $IPASTATUS == 1 ]]; then
 		echo -e "${BR}[!]${NC} Cleaning IPA Files"
 		rm -rf /var/mobile/Library/Application\ Support/Containers/com.iphonecake.appcake2/Documents/Inbox/*.ipa &> /dev/null
+		fi
+		if [[ $SMSSTATUS == 1 ]]; then
 		echo -e "${BR}[!]${NC} Cleaning Messages"
 		rm -rf /var/mobile/Library/SMS/Attachments/* &> /dev/null
+		fi
+		if [[ $ASSETSSTATUS == 1 ]]; then
 		echo -e "${BR}[!]${NC} Cleaning Assets"
 		rm -rf /var/mobile/Library/Assets/ &> /dev/null
- 		clear
-
+		fi
+		clear
 		echo -e "${BR}[!]${NC} Cleaned ${LGR}${SIZEDIV}${NC} Megabytes."
 		echo ""
-read -p "Press <Enter> to continue"
+		read -p "Press <Enter> to continue"
 
 		#ENDED 1
 
 
 elif [[ "$m" == "2" ]]; then
 
-		clear & showLoading "Analyzing"
-		fileSizes
+		clear
+		fileSizes & showLoading "Analyzing"
+		if [[ $CACHESTATUS2 == 1 ]]; then
 		echo -e "${BR}[!]${NC} Cleaning Caches"
 		rm -rf /var/mobile/Library/Caches/* &> /dev/null
+		fi
+		if [[ $DOWNLOADSTATUS == 1 ]]; then
 		echo -e "${BR}[!]${NC} Cleaning Downloads"
 		rm -rf /var/mobile/Media/Downloads/* &> /dev/null
+		fi
 		echo -e "${BR}[!]${NC} Cleaning TMP"
 		rm -rf /var/tmp/* &> /dev/null
 		echo -e "${BR}[!]${NC} Cleaning Log Files"
 		find /var/logs/ -name "*.log*" -exec rm {} \; &> /dev/null
 		find /var/log/ -name "*.log*" -exec rm {} \; &> /dev/null
 		find /var/mobile/Library/Logs/ -name "*.log*" -exec rm {} \; &> /dev/null
-		find /var/mobile/Containers/Data/Application/ -name "*.log" -exec rm {} \; &> /dev/null
-		rm -rf /var/mobile/diskpie.last &> /dev/null
+		if [[ $APPLOGSTATUS == 1 ]]; then
+		echo -e "${BR}[!]${NC} Cleaning Application Logs"
+                find /var/mobile/Containers/Data/Application/ -name "*.log" -exec rm {} \;  &> /dev/null
+                fi
 		rm -rf /var/mobile/.bash_history &> /dev/null
-		echo -e "${BR}[!]${NC} Cleaning Messages"
-		rm -rf /var/mobile/Library/SMS/Attachments/* &> /dev/null
+                if [[ $SMSSTATUS == 1 ]]; then
+                echo -e "${BR}[!]${NC} Cleaning Messages"
+                rm -rf /var/mobile/Library/SMS/Attachments/* &> /dev/null
+                fi
 		echo -e "${BR}[!]${NC} Cleaning Cydia"
-		rm -rf /var/mobile/Documents/CyDown/* &> /dev/null
+                if [[ $CYDIASTATUS == 1 ]]; then
+                rm -rf /var/mobile/Documents/CyDown/* &> /dev/null
+                fi
 		rm -rf /var/cache/apt/archives/partial/*.deb &> /dev/null
 		rm -rf /var/cache/apt/archives/*.deb &> /dev/null
-		echo -e "${BR}[!]${NC} Cleaning IPA Files"
+		if [[ $IPASTATUS == 1 ]]; then
+                echo -e "${BR}[!]${NC} Cleaning IPA Files"
 		rm -rf /var/mobile/Library/Application\ Support/Containers/com.iphonecake.appcake2/Documents/Inbox/*.ipa &> /dev/null
+		fi
 		clear
 	
 		echo -e "${BR}[!]${NC} Cleaned ${LGR}${SIZEDIV2}${NC} Megabytes."
@@ -188,11 +310,24 @@ elif [[ "$m" == "2" ]]; then
     elif [[ "$m" == "3" ]]; then
 
 		clear
-		read -p "This is an irreversible change and will cause Siri to be unusable. But you will recover around a GB of space. If you wish to continue, Press <Enter>"
+		echo -e "${BR}[!]${RED} This is an irreversible change and will cause Siri to be unusable. But you will recover around a GB of space.${NC}"
+		echo ""
+		if [[ "no" == $(ask_yes_or_no "Are you sure?") || \
+		"no" == $(ask_yes_or_no "Are you *really* sure?") ]]
+		then
+		echo "Skipped."
+		showMenu
+		fi
+		clear
+		fileSizes & showLoading "Analyzing"
+		if [[ $ASSETSSTATUS == 1 ]]; then
 		echo -e "${BR}[!]${NC} Removing Assets"
-		clear & showLoading "Analyzing"
-		fileSizes
 		rm -rf /var/mobile/Library/Assets/ &> /dev/null
+		else
+		echo -e "${BR}[!]${NC} Assets Not Found"
+		fi
+		sleep 1
+		clear
 		echo -e "${BR}[!]${NC} Cleaned ${LGR}${SIZEDIV3}${NC} Megabytes."
 		echo ""
 		read -p "Press <Enter> to continue"

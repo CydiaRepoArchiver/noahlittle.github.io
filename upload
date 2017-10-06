@@ -1,5 +1,13 @@
+#ZHU SHOU"
+
+echo "Commit Message?"
+read message
+
+#er
+
+
 git init
 git remote add origin https://github.com/noahlittle/noahlittle.github.io.git
 git add --all
-git commit -m "Update Packages"
+git commit -m "$message"
 git push origin master
