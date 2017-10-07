@@ -225,7 +225,7 @@ elif [[ "$m" == "2" ]]; then
 		cleansms & showLoading "Cleaning SMS"
 
 	 	SIZE2=$((APPLOGSIZE + TMPSIZE2 + CACHESIZE2 + SMSSIZE + CYDIASIZE + CYDIASIZE2 + IPASIZE + LOGSSIZE + LOGSSIZE2 + LOGSSIZE3 + DOWNLOADSIZE))
-	  	SIZEDIV2=$((SIZE2 / 1024 / 1024))
+		SIZEDIV2=$(echo ${SIZE2} | awk '{ size = $1 / 1024 / 1024 ; print size}')
 
 		clear
 		echo -e "${BR}[!]${NC} Cleaned ${LGR}${SIZEDIV2}${NC} Megabytes."
