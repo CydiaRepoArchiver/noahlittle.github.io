@@ -30,76 +30,103 @@ showLoading() {
 }
 
 
+getSizes(){
 
-		cleantmp() {
-
-		if [ -d "/var/tmp/" ]; then
 		TMPSIZE="$(echo `find /var/tmp/ -type f -exec stat -c %s {} \; | tr '\n' '+' | sed 's/+$//g'` | bc)"
-		fi
-
-		}
-
-		cleandownloads(){
-
-		if [ -d "/var/mobile/Media/Downloads/" ]; then
 		DOWNLOADSIZE="$(echo `find /var/mobile/Media/Downloads/ -type f -exec stat -c %s {} \; | tr '\n' '+' | sed 's/+$//g'` | bc)"
-		fi
-
-		}
-
-		cleanlogs(){
 		LOGSSIZE="$(echo `find /var/logs/ -type f -exec stat -c %s {} \; | tr '\n' '+' | sed 's/+$//g'` | bc)"
 		LOGSSIZE2="$(echo `find /var/log/ -type f -exec stat -c %s {} \; | tr '\n' '+' | sed 's/+$//g'` | bc)"
 		LOGSSIZE3="$(echo `find /var/mobile/Library/Logs/ -type f -exec stat -c %s {} \; | tr '\n' '+' | sed 's/+$//g'` | bc)"
-
-		}
-
-		cleanapplogs(){
 
 		if [ -d "/private/var/mobile/Containers/Data/Application/" ]; then
 		APPLOGSIZE="$(echo `find /private/var/mobile/Containers/Data/Application/ -name "*.log" -type f -exec stat -c %s {} \; | tr '\n' '+' | sed 's/+$//g'` | bc)"
 		fi
 
+		CACHESIZE="$(echo `find /var/mobile/Library/Caches/ ! -name *. -not -path "/var/mobile/Library/Caches/CloudKit/*" -type f -exec stat -c %s {} \; | tr '\n' '+' | sed 's/+$//g'` | bc)"
+
+		if [ -d "/var/mobile/Documents/CyDown/" ]; then
+		CYDIASIZE="$(echo `find /var/mobile/Documents/CyDown/ -type f -exec stat -c %s {} \; | tr '\n' '+' | sed 's/+$//g'` | bc)"
+		fi
+
+		CYDIASIZE2="$(echo `find /var/cache/apt/archives/ -type f -exec stat -c %s {} \; | tr '\n' '+' | sed 's/+$//g'` | bc)"
+
+		if [ -d "/var/mobile/Library/Application\ Support/Containers/com.iphonecake.appcake2/Documents/Inbox/" ]; then
+		IPASIZE="$(echo `find /var/mobile/Library/Application\ Support/Containers/com.iphonecake.appcake2/Documents/Inbox/ -type f -exec stat -c %s {} \; | tr '\n' '+' | sed 's/+$//g'` | bc)"
+		fi
+
+		SMSSIZE="$(echo `find /var/mobile/Library/SMS/Attachments/ -type f -exec stat -c %s {} \; | tr '\n' '+' | sed 's/+$//g'` | bc)"
+
+		if [ -d "/var/mobile/Library/Assets/" ]; then
+		ASSETSSIZE="$(echo `find /var/mobile/Library/Assets/ -type f -exec stat -c %s {} \; | tr '\n' '+' | sed 's/+$//g'` | bc)"
+		fi
+
+		SIZE="$((APPLOGSIZE + TMPSIZE + CYDIASIZE + CACHESIZE + CYDIASIZE2 + IPASIZE + SMSSIZE + ASSETSSIZE + LOGSSIZE + LOGSSIZE2 + LOGSSIZE3 + DOWNLOADSIZE))"
+		SIZEDIV="$(echo ${SIZE} | awk '{ size = $1 / 1024 / 1024 ; print size}')"
+
+	 	SIZE2="$((APPLOGSIZE + TMPSIZE2 + CACHESIZE2 + SMSSIZE + CYDIASIZE + CYDIASIZE2 + IPASIZE + LOGSSIZE + LOGSSIZE2 + LOGSSIZE3 + DOWNLOADSIZE))"
+		SIZEDIV2="$(echo ${SIZE2} | awk '{ size = $1 / 1024 / 1024 ; print size}')"
+
+	 	SIZE3="$((ASSETSSIZE))"
+	  	SIZEDIV3="$(echo ${SIZE3} | awk '{ size = $1 + 1024 + 1024 ; print size}')"
+}
+
+
+		cleantmp() {
+
+		rm -rf /var/tmp/* &> /dev/null
+
+		}
+
+		cleandownloads(){
+
+
+		rm -rf /var/mobile/Media/Downloads/* &> /dev/null
+
+		}
+
+		cleanlogs(){
+		find /var/logs/ -name "*.log*" -exec rm {} \; &> /dev/null
+		find /var/log/ -name "*.log*" -exec rm {} \; &> /dev/null
+		rm /var/mobile/.bash_history &> /dev/null
+		find /var/mobile/Library/Logs/ -name "*.log*" -exec rm {} \;  &> /dev/null
+
+		}
+
+		cleanapplogs(){
+
+		find /var/mobile/Containers/Data/Application/ -name "*.log" -exec rm {} \;  &> /dev/null
+
 		}
 
 		cleancaches(){
 
-		if [ -d "/var/mobile/Library/Caches/" ]; then
-		CACHESIZE="$(echo `find /var/mobile/Library/Caches/ ! -name *. -not -path "/var/mobile/Library/Caches/CloudKit/*" -type f -exec stat -c %s {} \; | tr '\n' '+' | sed 's/+$//g'` | bc)"
-		fi
+		rm -rf /var/mobile/Library/Caches/* &> /dev/null
 
 		}
 
 		cleancydia(){
 		
-		if [ -d "/var/mobile/Documents/CyDown/" ]; then
-		CYDIASIZE="$(echo `find /var/mobile/Documents/CyDown/ -type f -exec stat -c %s {} \; | tr '\n' '+' | sed 's/+$//g'` | bc)"
-		fi
-		CYDIASIZE2="$(echo `find /var/cache/apt/archives/ -type f -exec stat -c %s {} \; | tr '\n' '+' | sed 's/+$//g'` | bc)"
+		rm -rf /var/mobile/Documents/CyDown/* &> /dev/null
+		rm -rf /var/cache/apt/archives/partial/*.deb
+		rm -rf /var/cache/apt/archives/*.deb &> /dev/null
 
 		}
 
 		cleanipa(){
 		
-		if [ -d "/var/mobile/Library/Application\ Support/Containers/com.iphonecake.appcake2/Documents/Inbox/" ]; then
-		IPASIZE="$(echo `find /var/mobile/Library/Application\ Support/Containers/com.iphonecake.appcake2/Documents/Inbox/ -type f -exec stat -c %s {} \; | tr '\n' '+' | sed 's/+$//g'` | bc)"
-		fi
+		rm -rf /var/mobile/Library/Application\ Support/Containers/com.iphonecake.appcake2/Documents/Inbox/*.ipa &> /dev/null
 		
 		}
 
 		cleansms(){
 
-		if [ -d "/var/mobile/Library/SMS/Attachments/" ]; then
-		SMSSIZE="$(echo `find /var/mobile/Library/SMS/Attachments/ -type f -exec stat -c %s {} \; | tr '\n' '+' | sed 's/+$//g'` | bc)"
-		fi
+		rm -rf /var/mobile/Library/SMS/Attachments/* &> /dev/null
 
 		}
 
 		cleanassets(){
 
-		if [ -d "/var/mobile/Library/Assets/" ]; then
-		ASSETSSIZE="$(echo `find /var/mobile/Library/Assets/ -type f -exec stat -c %s {} \; | tr '\n' '+' | sed 's/+$//g'` | bc)"
-		fi
+		rm -rf /var/mobile/Library/Assets/ &> /dev/null
 
 		}
 
@@ -125,7 +152,7 @@ clear
 		echo "-----------------------------------------------------"
 		echo -e "${BR}                    .:TCLEANER:.${NC}"
 		echo -e "${BR}                noahlittle.github.io${NC}"
-		echo -e "${LGR}v1.1.2b2${NC}"
+		echo -e "${LGR}v1.1.2b3${NC}"
 		echo "-----------------------------------------------------"
 		echo -e "${BR}[1]${NC} Clean All ${RED}(DANGEROUS)${NC}"
 		echo -e "${BR}[2]${NC} Clean ${GR}(SAFE)${NC}"
@@ -157,43 +184,27 @@ do
 		showMenu
 		fi
 
-		clear & showLoading "Analyzing"
+		clear
 
+		getSizes & showLoading "Analyzing"
 
 		cleantmp & showLoading "Cleaning TMP"
-		rm -rf /var/tmp/* &> /dev/null
 
 		cleandownloads & showLoading "Cleaning Downloads"
-		rm -rf /var/mobile/Media/Downloads/* &> /dev/null
 		
 		cleanlogs & showLoading "Cleaning Logs"
-		find /var/logs/ -name "*.log*" -exec rm {} \; &> /dev/null
-		find /var/log/ -name "*.log*" -exec rm {} \; &> /dev/null
-		rm /var/mobile/.bash_history &> /dev/null
-		find /var/mobile/Library/Logs/ -name "*.log*" -exec rm {} \;  &> /dev/null
 		
 		cleanapplogs & showLoading "Cleaning App Logs"
-		find /var/mobile/Containers/Data/Application/ -name "*.log" -exec rm {} \;  &> /dev/null
 		
 		cleancaches & showLoading "Cleaning Caches"
-		rm -rf /var/mobile/Library/Caches/* &> /dev/null
 
 		cleancydia & showLoading "Cleaning Cydia"
-		rm -rf /var/mobile/Documents/CyDown/* &> /dev/null
-		rm -rf /var/cache/apt/archives/partial/*.deb
-		rm -rf /var/cache/apt/archives/*.deb &> /dev/null
 
-		cleanipa $ showLoading "Cleaning iPA Files"
-		rm -rf /var/mobile/Library/Application\ Support/Containers/com.iphonecake.appcake2/Documents/Inbox/*.ipa &> /dev/null
+		cleanipa & showLoading "Cleaning iPA Files"
 
 		cleansms & showLoading "Cleaning SMS"
-		rm -rf /var/mobile/Library/SMS/Attachments/* &> /dev/null
 
 		cleanassets & showLoading "Cleaning Assets"
-		rm -rf /var/mobile/Library/Assets/ &> /dev/null
-
-		SIZE=$((APPLOGSIZE + TMPSIZE + CYDIASIZE + CACHESIZE + CYDIASIZE2 + IPASIZE + SMSSIZE + ASSETSSIZE + LOGSSIZE + LOGSSIZE2 + LOGSSIZE3 + DOWNLOADSIZE))
-		SIZEDIV=$((SIZE / 1024 / 1024))
 
 		clear
 		echo -e "${BR}[!]${NC} Cleaned ${LGR}${SIZEDIV}${NC} Megabytes."
@@ -206,7 +217,9 @@ do
 
 elif [[ "$m" == "2" ]]; then
 
-		clear & showLoading "Analyzing"
+		clear
+
+		getSizes & showLoading "Analyzing"
 
 		cleantmp & showLoading "Cleaning TMP"
 
@@ -220,12 +233,9 @@ elif [[ "$m" == "2" ]]; then
 
 		cleancydia & showLoading "Cleaning Cydia"
 
-		cleanipa $ showLoading "Cleaning iPA Files"
+		cleanipa & showLoading "Cleaning iPA Files"
 
 		cleansms & showLoading "Cleaning SMS"
-
-	 	SIZE2=$((APPLOGSIZE + TMPSIZE2 + CACHESIZE2 + SMSSIZE + CYDIASIZE + CYDIASIZE2 + IPASIZE + LOGSSIZE + LOGSSIZE2 + LOGSSIZE3 + DOWNLOADSIZE))
-		SIZEDIV2=$(echo ${SIZE2} | awk '{ size = $1 / 1024 / 1024 ; print size}')
 
 		clear
 		echo -e "${BR}[!]${NC} Cleaned ${LGR}${SIZEDIV2}${NC} Megabytes."
@@ -247,12 +257,11 @@ elif [[ "$m" == "3" ]]; then
 		showMenu
 		fi
 
-		clear & showLoading "Analyzing"
+		clear
+
+		getSizes & showLoading "Analyzing"
 
 		cleanassets & showLoading "Cleaning Assets"
-
-	 	SIZE3=$((ASSETSSIZE))
-	  	SIZEDIV3=$((SIZE3 / 1024 / 1024))
 
 		clear
 		echo -e "${BR}[!]${NC} Cleaned ${LGR}${SIZEDIV3}${NC} Megabytes."
