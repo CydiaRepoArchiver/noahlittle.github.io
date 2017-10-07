@@ -125,7 +125,7 @@ clear
 		echo "-----------------------------------------------------"
 		echo -e "${BR}                    .:TCLEANER:.${NC}"
 		echo -e "${BR}                noahlittle.github.io${NC}"
-		echo -e "${LGR}v1.1.2b1${NC}"
+		echo -e "${LGR}v1.1.2b2${NC}"
 		echo "-----------------------------------------------------"
 		echo -e "${BR}[1]${NC} Clean All ${RED}(DANGEROUS)${NC}"
 		echo -e "${BR}[2]${NC} Clean ${GR}(SAFE)${NC}"
@@ -224,6 +224,9 @@ elif [[ "$m" == "2" ]]; then
 
 		cleansms & showLoading "Cleaning SMS"
 
+	 	SIZE2=$((APPLOGSIZE + TMPSIZE2 + CACHESIZE2 + SMSSIZE + CYDIASIZE + CYDIASIZE2 + IPASIZE + LOGSSIZE + LOGSSIZE2 + LOGSSIZE3 + DOWNLOADSIZE))
+	  	SIZEDIV2=$((SIZE2 / 1024 / 1024))
+
 		clear
 		echo -e "${BR}[!]${NC} Cleaned ${LGR}${SIZEDIV2}${NC} Megabytes."
 		echo ""
@@ -247,6 +250,9 @@ elif [[ "$m" == "3" ]]; then
 		clear & showLoading "Analyzing"
 
 		cleanassets & showLoading "Cleaning Assets"
+
+	 	SIZE3=$((ASSETSSIZE))
+	  	SIZEDIV3=$((SIZE3 / 1024 / 1024))
 
 		clear
 		echo -e "${BR}[!]${NC} Cleaned ${LGR}${SIZEDIV3}${NC} Megabytes."
