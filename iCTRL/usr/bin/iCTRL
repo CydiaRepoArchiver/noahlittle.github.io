@@ -94,7 +94,7 @@ clear
                            
 ${Color_Off}"
 		echo -e "${Yellowed}By Noah Little (@noahacks)${Color_Off}"
-		echo "iCTRL v1.1.2"
+		echo "iCTRL v1.1.3"
 		echo -e "${On_Blue}*****************************************************${On_Black}"
 		echo -e "${Yellow}[1]${Color_Off} CUPP"
 		echo -e "${Yellow}[2]${Color_Off} SMS BOMB"
@@ -188,6 +188,9 @@ elif [[ "$m" == "99" ]]; then
 	easy_install BeautifulSoup &> /dev/null
 	easy_install requests==2.8.1 &> /dev/null
 	echo -e "${Yellow}[!]${Color_Off} Installed Modules"
+	echo -e "${Yellow}[!]${Color_Off} Cleaning Up"
+	rm /var/mobile/Downloads/setuptools*
+	echo -e "${Yellow}[!]${Color_Off} Cleaned"
 	echo -e "${Yellow}[!]${Color_Off} Patcher Completed!"
 	read -p "Press <Enter> to continue"
 fi

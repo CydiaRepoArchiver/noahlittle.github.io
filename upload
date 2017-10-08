@@ -1,4 +1,4 @@
-#ZHU SHOU"
+# GITHUB ZHU SHOU
 
 clear
 read -p 'Commit Message: ' message
@@ -11,3 +11,4 @@ git remote add origin https://github.com/noahlittle/noahlittle.github.io.git
 git add --all
 git commit -m "$message"
 git push origin master
+
