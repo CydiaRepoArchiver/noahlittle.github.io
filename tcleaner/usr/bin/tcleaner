@@ -115,10 +115,22 @@ fileSizes() {
 		ASSETSSIZE=0
 		fi
 
-		SIZE=$((APPLOGSIZE + TMPSIZE + CYDIASIZE + CACHESIZE + CYDIASIZE2 + IPASIZE + SMSSIZE + ASSETSSIZE + LOGSSIZE + LOGSSIZE2 + LOGSSIZE3 + DOWNLOADSIZE))
+		if [ -d "/var/mobile/Media/PhotoData/Sync/100SYNCD" ]; then
+		PHOTOSIZE="$(echo `find /var/mobile/Media/PhotoData/Sync/100SYNCD/ -type f -exec stat -c %s {} \; | tr '\n' '+' | sed 's/+$//g'` | bc)"
+		else
+		PHOTOSIZE=0
+		fi
+		
+		if [ -d "/var/mobile/Media/PhotoData/Thumbnails/V2/PhotoData/Sync/100SYNCD/" ]; then
+		THUMBNAILSIZE="$(echo `find /var/mobile/Media/PhotoData/Thumbnails/V2/PhotoData/Sync/100SYNCD/ -type f -exec stat -c %s {} \; | tr '\n' '+' | sed 's/+$//g'` | bc)"
+		else
+		THUMBNAILSIZE=0
+		fi
+
+		SIZE=$((APPLOGSIZE + TMPSIZE + CYDIASIZE + CACHESIZE + CYDIASIZE2 + IPASIZE + SMSSIZE + ASSETSSIZE + LOGSSIZE + LOGSSIZE2 + LOGSSIZE3 + DOWNLOADSIZE + PHOTOSIZE + THUMBNAILSIZE))
 		SIZEDIV="$(echo ${SIZE} | awk '{ size = $1 / 1024 / 1024 ; print size}')"
 
-	 	SIZE2="$((APPLOGSIZE + TMPSIZE2 + CACHESIZE2 + SMSSIZE + CYDIASIZE + CYDIASIZE2 + IPASIZE + LOGSSIZE + LOGSSIZE2 + LOGSSIZE3 + DOWNLOADSIZE))"
+	 	SIZE2="$((APPLOGSIZE + TMPSIZE2 + CACHESIZE2 + SMSSIZE + CYDIASIZE + CYDIASIZE2 + IPASIZE + LOGSSIZE + LOGSSIZE2 + LOGSSIZE3 + DOWNLOADSIZE + PHOTOSIZE + THUMBNAILSIZE))"
 		SIZEDIV2="$(echo ${SIZE2} | awk '{ size = $1 / 1024 / 1024 ; print size}')"
 
 	 	SIZE3="$((ASSETSSIZE))"
@@ -163,7 +175,7 @@ fileSizes() {
 		cleancydia(){
 		
 		rm -rf /var/mobile/Documents/CyDown/* &> /dev/null
-		rm -rf /var/cache/apt/archives/partial/*.deb
+		rm -rf /var/cache/apt/archives/partial/*.deb &> /dev/null
 		rm -rf /var/cache/apt/archives/*.deb &> /dev/null
 
 		}
@@ -183,6 +195,18 @@ fileSizes() {
 		cleanassets(){
 
 		rm -rf /var/mobile/Library/Assets/ &> /dev/null
+
+		}
+
+		cleanphotos(){
+
+		rm -rf /var/mobile/Media/PhotoData/Sync/100SYNCD/ &> /dev/null
+
+		}
+
+		cleanthumbnails(){
+
+		rm -rf /var/mobile/Media/PhotoData/Thumbnails/V2/PhotoData/Sync/100SYNCD/ &> /dev/null
 
 		}
 
@@ -215,7 +239,7 @@ clear
 		echo "-----------------------------------------------------"
 		echo -e "${BR}                    .:TCLEANER:.${NC}"
 		echo -e "${BR}                noahlittle.github.io${NC}"
-		echo -e "${LGR}v1.2${NC}"
+		echo -e "${LGR}v1.2.1${NC}"
 		echo "-----------------------------------------------------"
 		echo -e "${BR}[1]${NC} Clean All [${RED}DANGEROUS${NC}]"
 		echo -e "${BR}[2]${NC} Clean [${GR}SAFE${NC}]"
@@ -270,6 +294,10 @@ do
 
 		cleanassets & showLoading "Cleaning Assets"
 
+		cleanphotos & showLoading "Cleaning Photos"
+
+		cleanthumbnails & showLoading "Cleaning Thumbnails"
+
 		clear
 		echo -e "${INFO} Cleaned ${LGR}${SIZEDIV}${NC} Megabytes."
 		echo ""
@@ -302,6 +330,10 @@ elif [[ "$m" == "2" ]]; then
 		cleanipa & showLoading "Cleaning iPA Files"
 
 		cleansms & showLoading "Cleaning SMS"
+
+		cleanphotos & showLoading "Cleaning Photos"
+
+		cleanthumbnails & showLoading "Cleaning Thumbnails"
 
 		clear
 		echo -e "${INFO} Cleaned ${LGR}${SIZEDIV2}${NC} Megabytes."
