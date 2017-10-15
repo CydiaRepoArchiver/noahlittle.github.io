@@ -1,4 +1,7 @@
 #!/bin/bash
+
+#COLOURS
+
 RED='\033[0;31m'
 NC='\033[0m'
 BR='\033[0;33m'
@@ -7,6 +10,19 @@ LGR='\033[1;32m'
 LRED='\033[1;31m'
 CY='\033[0;36m'
 
+#TAGS
+
+DBAS=${CY}[**]${NC}
+INFO=${BR}[!]${NC}
+ERROR=${RED}[*${LRED}*${RED}]${NC}
+LOAD=${GR}[*]${NC}
+PROG1="[    ]"
+PROG2="[${GR}>${NC}   ]"
+PROG3="[${GR}=>${NC}  ]"
+PROG4="[${GR}==>${NC} ]"
+PROG5="[${GR}===>${NC}]"
+PROG6="[${GR}DONE${NC}]"
+ENTER="[${CY}>${NC}]"
 
 showLoading() {
   mypid=$!
@@ -15,18 +31,21 @@ showLoading() {
   echo -ne "$Analyzing\r"
 
   while kill -0 $mypid 2>/dev/null; do
-    echo -ne "${BR}[!]${NC} $Analyzing.\r"
-    sleep 0.5
-    echo -ne "${BR}[!]${NC} $Analyzing..\r"
-    sleep 0.5
-    echo -ne "${BR}[!]${NC} $Analyzing...\r"
-    sleep 0.5
+    echo -ne "${LOAD} $Analyzing ${PROG1}\r"
+    sleep 0.2
+    echo -ne "${LOAD} $Analyzing ${PROG2}\r"
+    sleep 0.2
+    echo -ne "${LOAD} $Analyzing ${PROG3}\r"
+    sleep 0.2
+    echo -ne "${LOAD} $Analyzing ${PROG4}\r"
+    sleep 0.2
+    echo -ne "${LOAD} $Analyzing ${PROG5}\r"
+    sleep 0.2
     echo -ne "\r\033[K"
-    echo -ne "${BR}[!]${NC} $Analyzing\r"
-    sleep 0.5
+    echo -ne "${LOAD} $Analyzing ${PROG6}\r"
   done
 
-  echo -e "${BR}[!]${NC} $Analyzing...${GR}FINISHED${NC}"
+  echo -e "${LOAD} $Analyzing ${PROG6}"
 }
 
 
@@ -171,18 +190,20 @@ fileSizes() {
 
 #CHECKS
 
-clear & showLoading "Loading TCLEANER"
+clear
+echo -e "${DBAS} Loading TCLEANER"
 sleep 1
-echo -e "${BR}[!]${NC} Developed by Noah Little (@noahacks)"
-echo -e "${BR}[!]${NC} Please don't rebrand this product and re-release!"
+echo ""
+echo -e "${INFO} Developed by Noah Little (@noahacks)"
+echo -e "${INFO} Please don't rebrand this product and re-release!"
 sleep 2
 if [[ $EUID -ne 0 ]]; then
-   echo -e "${BR}[!]${NC} TCLEANER requires root privileges, please use ${RED}sudo ${0}${NC} Or login as root!" 
-   exit 1
+echo -e "${ERROR} TCLEANER requires root privileges, please use ${RED}sudo ${0}${NC} Or login as root!" 
+exit 1
 fi
 if [ ! -f /usr/bin/bc ]; then
-    echo "\"usr/bin/bc\" Does not exist. Exiting. "
-    exit 1
+echo "${ERROR} \"usr/bin/bc\" Does not exist. Exiting. "
+exit 1
 fi
 
 #CHECKS PASSED, CONTINUING.
@@ -194,19 +215,20 @@ clear
 		echo "-----------------------------------------------------"
 		echo -e "${BR}                    .:TCLEANER:.${NC}"
 		echo -e "${BR}                noahlittle.github.io${NC}"
-		echo -e "${LGR}v1.1.4${NC}"
+		echo -e "${LGR}v1.2${NC}"
 		echo "-----------------------------------------------------"
-		echo -e "${BR}[1]${NC} Clean All ${RED}(DANGEROUS)${NC}"
-		echo -e "${BR}[2]${NC} Clean ${GR}(SAFE)${NC}"
-		echo -e "${BR}[3]${NC} Remove ASSETS ${RED}(BREAKS SIRI)${NC}"
+		echo -e "${BR}[1]${NC} Clean All [${RED}DANGEROUS${NC}]"
+		echo -e "${BR}[2]${NC} Clean [${GR}SAFE${NC}]"
+		echo -e "${BR}[3]${NC} Remove Assets Folder [${RED}DANGEROUS${NC}]"
 		echo ""
 		echo -e "${BR}[0]${NC} Exit"
 		echo "-----------------------------------------------------"
-		echo -e "${BR}[!]${NC} $(df /dev/disk0s1s1 | awk '{print $5}' | tail -n 1) Used on / Partition."
-		echo -e "${BR}[!]${NC} $(df /dev/disk0s1s2 | awk '{print $5}' | tail -n 1) Used on /private/var/ Partition."
+		echo -e "${INFO} ${GR}$(df /dev/disk0s1s1 | awk '{print $5}' | tail -n 1)${NC} Used on ${CY}/${NC} Partition."
+		echo -e "${INFO} ${GR}$(df /dev/disk0s1s2 | awk '{print $5}' | tail -n 1)${NC} Used on ${CY}/private/var/${NC} Partition."
 		echo "-----------------------------------------------------"
 		echo ""
-		read -p "Option: " mc
+		echo -ne "${ENTER} Option: "
+		read -p "" mc
 return $mc
 }
 
@@ -226,7 +248,7 @@ do
 		showMenu
 		fi
 
-		echo -e "${CY}[**]${NC} Checking File System" & fileSizes
+		echo -e "${DBAS} Checking File System" & fileSizes
 
 		echo ""
 
@@ -249,9 +271,9 @@ do
 		cleanassets & showLoading "Cleaning Assets"
 
 		clear
-		echo -e "${BR}[!]${NC} Cleaned ${LGR}${SIZEDIV}${NC} Megabytes."
+		echo -e "${INFO} Cleaned ${LGR}${SIZEDIV}${NC} Megabytes."
 		echo ""
-		echo -e -n "${BR}[!]${NC} Press <Enter> to continue"
+		echo -e -n "${ENTER} Press <Enter> to continue"
 		read
 
 		#ENDED 1
@@ -261,7 +283,7 @@ elif [[ "$m" == "2" ]]; then
 
 		clear
 
-		echo -e "${CY}[**]${NC} Checking File System" & fileSizes
+		echo -e "${DBAS} Checking File System" & fileSizes
 
 		echo ""
 
@@ -282,9 +304,9 @@ elif [[ "$m" == "2" ]]; then
 		cleansms & showLoading "Cleaning SMS"
 
 		clear
-		echo -e "${BR}[!]${NC} Cleaned ${LGR}${SIZEDIV2}${NC} Megabytes."
+		echo -e "${INFO} Cleaned ${LGR}${SIZEDIV2}${NC} Megabytes."
 		echo ""
-		echo -e -n "${BR}[!]${NC} Press <Enter> to continue"
+		echo -e -n "${ENTER} Press <Enter> to continue"
 		read
 	
 		#ENDED 2
@@ -303,16 +325,16 @@ elif [[ "$m" == "3" ]]; then
 
 		clear
 
-		echo -e "${CY}[**]${NC} Checking File System" & fileSizes
+		echo -e "${DBAS} Checking File System" & fileSizes
 
 		echo ""
 
 		cleanassets & showLoading "Cleaning Assets"
 
 		clear
-		echo -e "${BR}[!]${NC} Cleaned ${LGR}${SIZEDIV3}${NC} Megabytes."
+		echo -e "${INFO} Cleaned ${LGR}${SIZEDIV3}${NC} Megabytes."
 		echo ""
-		echo -e -n "${BR}[!]${NC} Press <Enter> to continue"
+		echo -e -n "${ENTER} Press <Enter> to continue"
 		read
 
 		#ENDED 3
