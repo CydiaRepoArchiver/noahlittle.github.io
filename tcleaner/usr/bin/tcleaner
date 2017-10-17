@@ -1,5 +1,6 @@
 #!/bin/bash
 
+
 #COLOURS
 
 RED='\033[0;31m'
@@ -32,15 +33,15 @@ showLoading() {
 
   while kill -0 $mypid 2>/dev/null; do
     echo -ne "${LOAD} $Analyzing ${PROG1}\r"
-    sleep 0.2
+    sleep 0.1
     echo -ne "${LOAD} $Analyzing ${PROG2}\r"
-    sleep 0.2
+    sleep 0.1
     echo -ne "${LOAD} $Analyzing ${PROG3}\r"
-    sleep 0.2
+    sleep 0.1
     echo -ne "${LOAD} $Analyzing ${PROG4}\r"
-    sleep 0.2
+    sleep 0.1
     echo -ne "${LOAD} $Analyzing ${PROG5}\r"
-    sleep 0.2
+    sleep 0.1
     echo -ne "\r\033[K"
     echo -ne "${LOAD} $Analyzing ${PROG6}\r"
   done
@@ -50,6 +51,49 @@ showLoading() {
 
 
 fileSizes() {
+
+		#SAFARI CHUNK
+		if [ -d "/var/mobile/Containers/Data/Application/" ]; then
+		SAFLOC="$(find /var/mobile/Containers/Data/Application/ -name "Safari" -ls | cut -d/ -f 7)"
+		else
+		SAFLOC=0
+		fi
+
+		if [ -d "/var/mobile/Containers/Data/Application/${SAFLOC}/Library/Safari/Thumbnails/" ]; then
+		SAFARITHUMBNAILSIZE="$(echo `find /var/mobile/Containers/Data/Application/${SAFLOC}/Library/Safari/Thumbnails/ -type f -exec stat -c %s {} \; | tr '\n' '+' | sed 's/+$//g'` | bc)"
+		else
+		SAFARITHUMBNAILSIZE=0
+		fi
+		
+		if [ -d "/var/mobile/Containers/Data/Application/${SAFLOC}/Library/Caches/" ]; then
+		SAFARICACHESIZE="$(echo `find /var/mobile/Containers/Data/Application/${SAFLOC}/Library/Caches/ -type f -exec stat -c %s {} \; | tr '\n' '+' | sed 's/+$//g'` | bc)"
+		else
+		SAFARICACHESIZE=0
+		fi
+
+		if [ -f "/var/mobile/Containers/Data/Application/${SAFLOC}/Library/Safari/History.db-wal" ]; then
+		SAFARIHISTORY1="$(stat --printf="%s" /var/mobile/Containers/Data/Application/${SAFLOC}/Library/Safari/History.db-wal)"
+		else
+		SAFARIHISTORY1=0
+		fi
+
+		if [ -f "/var/mobile/Containers/Data/Application/${SAFLOC}/Library/Safari/History.db" ]; then
+		SAFARIHISTORY2="$(stat --printf="%s" /var/mobile/Containers/Data/Application/${SAFLOC}/Library/Safari/History.db)"
+		else
+		SAFARIHISTORY2=0
+		fi
+
+		if [ -f "/var/mobile/Containers/Data/Application/${SAFLOC}/Library/Safari/History.db-shm" ]; then
+		SAFARIHISTORY3="$(stat --printf="%s" /var/mobile/Containers/Data/Application/${SAFLOC}/Library/Safari/History.db-shm)"
+		else
+		SAFARIHISTORY3=0
+		fi
+		
+		if [ -f "/var/mobile/Containers/Data/Application/${SAFLOC}/Library/Safari/SuspendState.plist" ]; then
+		SAFARIHISTORY4="$(stat --printf="%s" /var/mobile/Containers/Data/Application/${SAFLOC}/Library/Safari/SuspendState.plist)"
+		else
+		SAFARIHISTORY4=0
+		fi
 
 		if [ -d "/var/tmp/" ]; then
 		TMPSIZE="$(echo `find /var/tmp/ -type f -exec stat -c %s {} \; | tr '\n' '+' | sed 's/+$//g'` | bc)"
@@ -127,10 +171,10 @@ fileSizes() {
 		THUMBNAILSIZE=0
 		fi
 
-		SIZE=$((APPLOGSIZE + TMPSIZE + CYDIASIZE + CACHESIZE + CYDIASIZE2 + IPASIZE + SMSSIZE + ASSETSSIZE + LOGSSIZE + LOGSSIZE2 + LOGSSIZE3 + DOWNLOADSIZE + PHOTOSIZE + THUMBNAILSIZE))
+		SIZE=$((APPLOGSIZE + TMPSIZE + CYDIASIZE + CACHESIZE + CYDIASIZE2 + IPASIZE + SMSSIZE + ASSETSSIZE + LOGSSIZE + LOGSSIZE2 + LOGSSIZE3 + DOWNLOADSIZE + PHOTOSIZE + THUMBNAILSIZE + SAFARICACHESIZE + SAFARIHISTORY4 + SAFARIHISTORY3 + SAFARIHISTORY2 + SAFARIHISTORY1))
 		SIZEDIV="$(echo ${SIZE} | awk '{ size = $1 / 1024 / 1024 ; print size}')"
 
-	 	SIZE2="$((APPLOGSIZE + TMPSIZE2 + CACHESIZE2 + SMSSIZE + CYDIASIZE + CYDIASIZE2 + IPASIZE + LOGSSIZE + LOGSSIZE2 + LOGSSIZE3 + DOWNLOADSIZE + PHOTOSIZE + THUMBNAILSIZE))"
+	 	SIZE2="$((APPLOGSIZE + TMPSIZE2 + CACHESIZE2 + SMSSIZE + CYDIASIZE + CYDIASIZE2 + IPASIZE + LOGSSIZE + LOGSSIZE2 + LOGSSIZE3 + DOWNLOADSIZE + PHOTOSIZE + THUMBNAILSIZE + SAFARICACHESIZE + SAFARIHISTORY4 + SAFARIHISTORY3 + SAFARIHISTORY2 + SAFARIHISTORY1))"
 		SIZEDIV2="$(echo ${SIZE2} | awk '{ size = $1 / 1024 / 1024 ; print size}')"
 
 	 	SIZE3="$((ASSETSSIZE))"
@@ -210,12 +254,23 @@ fileSizes() {
 
 		}
 
+		cleansafari(){
+
+		rm -rf /var/mobile/Containers/Data/Application/${SAFLOC}/Library/Caches/* &> /dev/null &> /dev/null
+		rm -rf /var/mobile/Containers/Data/Application/${SAFLOC}/Library/Safari/History.db-wal &> /dev/null
+		rm -rf /var/mobile/Containers/Data/Application/${SAFLOC}/Library/Safari/History.db &> /dev/null
+		rm -rf /var/mobile/Containers/Data/Application/${SAFLOC}/Library/Safari/History.db-shm &> /dev/null
+		rm -rf /var/mobile/Containers/Data/Application/${SAFLOC}/Library/Safari/SuspendState.plist &> /dev/null
+		rm -rf /var/mobile/Containers/Data/Application/${SAFLOC}/Library/Safari/Thumbnails/* &> /dev/null
+
+		}
+
 
 
 #CHECKS
 
 clear
-echo -e "${DBAS} Loading TCLEANER"
+echo -e "${DBAS} Loading  TCLEANER"
 sleep 1
 echo ""
 echo -e "${INFO} Developed by Noah Little (@noahacks)"
@@ -239,7 +294,7 @@ clear
 		echo "-----------------------------------------------------"
 		echo -e "${BR}                    .:TCLEANER:.${NC}"
 		echo -e "${BR}                noahlittle.github.io${NC}"
-		echo -e "${LGR}v1.2.1${NC}"
+		echo -e "${LGR}v1.2.2${NC}"
 		echo "-----------------------------------------------------"
 		echo -e "${BR}[1]${NC} Clean All [${RED}DANGEROUS${NC}]"
 		echo -e "${BR}[2]${NC} Clean [${GR}SAFE${NC}]"
@@ -297,6 +352,8 @@ do
 		cleanphotos & showLoading "Cleaning Photos"
 
 		cleanthumbnails & showLoading "Cleaning Thumbnails"
+
+		cleansafari & showLoading "Cleaning Safari"
 
 		clear
 		echo -e "${INFO} Cleaned ${LGR}${SIZEDIV}${NC} Megabytes."
