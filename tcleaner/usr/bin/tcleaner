@@ -270,7 +270,7 @@ fileSizes() {
 #CHECKS
 
 clear
-echo -e "${DBAS} Loading  TCLEANER"
+echo -e "${DBAS} Loading TCLEANER"
 sleep 1
 echo ""
 echo -e "${INFO} Developed by Noah Little (@noahacks)"
