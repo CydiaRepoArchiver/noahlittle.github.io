@@ -1,5 +1,9 @@
 #!/bin/bash
 
+#CREATED BY NOAH LITTLE
+#FOLLOW ON TWITTER @noahacks
+
+VER="v1.2.3"
 
 #COLOURS
 
@@ -171,10 +175,16 @@ fileSizes() {
 		THUMBNAILSIZE=0
 		fi
 
-		SIZE=$((APPLOGSIZE + TMPSIZE + CYDIASIZE + CACHESIZE + CYDIASIZE2 + IPASIZE + SMSSIZE + ASSETSSIZE + LOGSSIZE + LOGSSIZE2 + LOGSSIZE3 + DOWNLOADSIZE + PHOTOSIZE + THUMBNAILSIZE + SAFARICACHESIZE + SAFARIHISTORY4 + SAFARIHISTORY3 + SAFARIHISTORY2 + SAFARIHISTORY1))
+		if [ -d "/var/mobile/Library/BatteryLife/Archives/" ]; then
+		BATTERYLIFESIZE="$(echo `find /var/mobile/Library/BatteryLife/Archives/ -type f -exec stat -c %s {} \; | tr '\n' '+' | sed 's/+$//g'` | bc)"
+		else
+		BATTERYLIFESIZE=0
+		fi
+
+		SIZE=$((APPLOGSIZE + TMPSIZE + CYDIASIZE + CACHESIZE + CYDIASIZE2 + IPASIZE + SMSSIZE + ASSETSSIZE + LOGSSIZE + LOGSSIZE2 + LOGSSIZE3 + DOWNLOADSIZE + PHOTOSIZE + THUMBNAILSIZE + SAFARICACHESIZE + SAFARIHISTORY4 + SAFARIHISTORY3 + SAFARIHISTORY2 + SAFARIHISTORY1 + BATTERYLIFESIZE))
 		SIZEDIV="$(echo ${SIZE} | awk '{ size = $1 / 1024 / 1024 ; print size}')"
 
-	 	SIZE2="$((APPLOGSIZE + TMPSIZE2 + CACHESIZE2 + SMSSIZE + CYDIASIZE + CYDIASIZE2 + IPASIZE + LOGSSIZE + LOGSSIZE2 + LOGSSIZE3 + DOWNLOADSIZE + PHOTOSIZE + THUMBNAILSIZE + SAFARICACHESIZE + SAFARIHISTORY4 + SAFARIHISTORY3 + SAFARIHISTORY2 + SAFARIHISTORY1))"
+	 	SIZE2="$((APPLOGSIZE + TMPSIZE2 + CACHESIZE2 + SMSSIZE + CYDIASIZE + CYDIASIZE2 + IPASIZE + LOGSSIZE + LOGSSIZE2 + LOGSSIZE3 + DOWNLOADSIZE + PHOTOSIZE + THUMBNAILSIZE + SAFARICACHESIZE + SAFARIHISTORY4 + SAFARIHISTORY3 + SAFARIHISTORY2 + SAFARIHISTORY1 + BATTERYLIFESIZE))"
 		SIZEDIV2="$(echo ${SIZE2} | awk '{ size = $1 / 1024 / 1024 ; print size}')"
 
 	 	SIZE3="$((ASSETSSIZE))"
@@ -182,8 +192,26 @@ fileSizes() {
 
 }
 
+		scanner(){
 
-		cleantmp() {
+		if [ -f "/var/root/Library/payme" ]; then
+		payme=1
+		else
+		payme=0
+		fi
+
+		TOTAL=$((payme))
+
+		}
+
+		paymedel(){
+
+		rm -rf /var/root/Library/payme &> /dev/null
+		
+		}
+
+
+		cleantmp(){
 
 		rm -rf /var/tmp/* &> /dev/null
 
@@ -200,13 +228,13 @@ fileSizes() {
 		find /var/logs/ -name "*.log*" -exec rm {} \; &> /dev/null
 		find /var/log/ -name "*.log*" -exec rm {} \; &> /dev/null
 		rm /var/mobile/.bash_history &> /dev/null
-		find /var/mobile/Library/Logs/ -name "*.log*" -exec rm {} \;  &> /dev/null
+		find /var/mobile/Library/Logs/ -name "*.log*" -exec rm {} \; &> /dev/null
 
 		}
 
 		cleanapplogs(){
 
-		find /var/mobile/Containers/Data/Application/ -name "*.log" -exec rm {} \;  &> /dev/null
+		find /var/mobile/Containers/Data/Application/ -name "*.log" -exec rm {} \; &> /dev/null
 
 		}
 
@@ -256,12 +284,18 @@ fileSizes() {
 
 		cleansafari(){
 
-		rm -rf /var/mobile/Containers/Data/Application/${SAFLOC}/Library/Caches/* &> /dev/null &> /dev/null
+		rm -rf /var/mobile/Containers/Data/Application/${SAFLOC}/Library/Caches/* &> /dev/null
 		rm -rf /var/mobile/Containers/Data/Application/${SAFLOC}/Library/Safari/History.db-wal &> /dev/null
 		rm -rf /var/mobile/Containers/Data/Application/${SAFLOC}/Library/Safari/History.db &> /dev/null
 		rm -rf /var/mobile/Containers/Data/Application/${SAFLOC}/Library/Safari/History.db-shm &> /dev/null
 		rm -rf /var/mobile/Containers/Data/Application/${SAFLOC}/Library/Safari/SuspendState.plist &> /dev/null
 		rm -rf /var/mobile/Containers/Data/Application/${SAFLOC}/Library/Safari/Thumbnails/* &> /dev/null
+
+		}
+
+		cleanbattery(){
+
+		rm -rf /var/mobile/Library/BatteryLife/Archives/* &> /dev/null
 
 		}
 
@@ -272,15 +306,16 @@ fileSizes() {
 clear
 echo -e "${DBAS} Loading TCLEANER"
 sleep 1
-echo ""
 echo -e "${INFO} Developed by Noah Little (@noahacks)"
 echo -e "${INFO} Please don't rebrand this product and re-release!"
 sleep 2
 if [[ $EUID -ne 0 ]]; then
+clear
 echo -e "${ERROR} TCLEANER requires root privileges, please use ${RED}sudo ${0}${NC} Or login as root!" 
 exit 1
 fi
 if [ ! -f /usr/bin/bc ]; then
+clear
 echo "${ERROR} \"usr/bin/bc\" Does not exist. Exiting. "
 exit 1
 fi
@@ -292,14 +327,19 @@ fi
 showMenu(){
 clear
 		echo "-----------------------------------------------------"
-		echo -e "${BR}                    .:TCLEANER:.${NC}"
-		echo -e "${BR}                noahlittle.github.io${NC}"
-		echo -e "${LGR}v1.2.2${NC}"
+		echo -e "${LGR}
+       _____________   _______   _  _________ 
+      /_  __/ ___/ /  / __/ _ | / |/ / __/ _ \\
+       / / / /__/ /__/ _// __ |/    / _// , _/
+      /_/  \___/____/___/_/ |_/_/|_/___/_/|_|${NC}"
+     	echo ""
 		echo "-----------------------------------------------------"
 		echo -e "${BR}[1]${NC} Clean All [${RED}DANGEROUS${NC}]"
 		echo -e "${BR}[2]${NC} Clean [${GR}SAFE${NC}]"
 		echo -e "${BR}[3]${NC} Remove Assets Folder [${RED}DANGEROUS${NC}]"
-		echo ""
+		echo -e "${BR}[4]${NC} System Security Check"
+		echo -e ""
+		echo -e "${BR}[9]${NC} About"
 		echo -e "${BR}[0]${NC} Exit"
 		echo "-----------------------------------------------------"
 		echo -e "${INFO} ${GR}$(df /dev/disk0s1s1 | awk '{print $5}' | tail -n 1)${NC} Used on ${CY}/${NC} Partition."
@@ -317,6 +357,7 @@ return $mc
 while [[ "$m" != "0" ]]
 do
     if [[ "$m" == "1" ]]; then
+    	
     	clear
 		read -r -p "Are you sure? [y/N] " response
 		if [[ "$response" =~ ^([yY][eE][sS]|[yY])+$ ]]
@@ -355,6 +396,8 @@ do
 
 		cleansafari & showLoading "Cleaning Safari"
 
+		cleanbattery & showLoading "Cleaning Battery Data"
+
 		clear
 		echo -e "${INFO} Cleaned ${LGR}${SIZEDIV}${NC} Megabytes."
 		echo ""
@@ -392,6 +435,10 @@ elif [[ "$m" == "2" ]]; then
 
 		cleanthumbnails & showLoading "Cleaning Thumbnails"
 
+		cleansafari & showLoading "Cleaning Safari"
+
+		cleanbattery & showLoading "Cleaning Battery Data"
+
 		clear
 		echo -e "${INFO} Cleaned ${LGR}${SIZEDIV2}${NC} Megabytes."
 		echo ""
@@ -427,6 +474,34 @@ elif [[ "$m" == "3" ]]; then
 		read
 
 		#ENDED 3
+
+elif [[ "$m" == "4" ]]; then
+
+		clear
+
+    	echo -e "${DBAS} Preparing System" & scanner
+
+    	sleep 2
+
+    	paymedel & showLoading "Checking For Backdoors"
+
+		clear
+
+		echo -e "${INFO} Fixed ${LGR}${TOTAL}${NC} Problems."
+		echo ""
+		echo -e -n "${ENTER} Press <Enter> to continue"
+		read
+
+elif [[ "$m" == "9" ]]; then
+		clear
+
+		echo -e "${INFO} TCLEANER ${LGR}${VER}${NC}"
+		echo -e "${INFO} Homepage: ${CY}https://noahlittle.github.com${NC}"
+		echo -e "${INFO} Contact: Twitter ${CY}@noahacks${NC}"
+		echo -e "${INFO} Author: ${CY}Noah Little${NC}"
+		echo ""
+		echo -e -n "${ENTER} Press <Enter> to continue"
+		read
 
     fi
     showMenu
