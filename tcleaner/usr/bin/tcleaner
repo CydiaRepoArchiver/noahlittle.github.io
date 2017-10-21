@@ -3,7 +3,8 @@
 #CREATED BY NOAH LITTLE
 #FOLLOW ON TWITTER @noahacks
 
-VER="v1.2.3"
+VER="v1.2.4"
+SECVER="v1.0"
 
 #COLOURS
 
@@ -496,6 +497,7 @@ elif [[ "$m" == "9" ]]; then
 		clear
 
 		echo -e "${INFO} TCLEANER ${LGR}${VER}${NC}"
+		echo -e "${INFO} TCLEANER Security Database ${LGR}${SECVER}${NC}"
 		echo -e "${INFO} Homepage: ${CY}https://noahlittle.github.com${NC}"
 		echo -e "${INFO} Contact: Twitter ${CY}@noahacks${NC}"
 		echo -e "${INFO} Author: ${CY}Noah Little${NC}"
